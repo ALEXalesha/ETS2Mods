@@ -1,0 +1,17 @@
+БЕЗ ШТРАФОВ (личный мод Алексея, только одиночная игра)
+
+- Все штрафы полиции и камер равны 0, а сами нарушения не засчитываются: превышение скорости, красный свет, встречная полоса, ДТП, фары ночью, объезд весов и досмотра, обочина, нелегальный прицеп, граница, неисправная машина, пропуск отдыха.
+- Отказ от груза: штраф 0 (был 12000 €).
+- Повреждение груза больше не уменьшает оплату (было -5 € и -4 % за каждый 1 %).
+- Опоздание: груз можно довезти в течение 30 дней после срока, рейс не срывается.
+
+Порядок: если включён мод Big Money (Alexey), он должен стоять ВЫШЕ этого мода.
+
+NO FINES (Alexey's personal mod, single player only)
+
+- All police and camera fines are 0 and offences are not registered: speeding, red light, wrong way, crash, no lights, avoiding weigh station or inspection, hard shoulder, illegal trailer, border, damaged vehicle, missed rest.
+- Abandoned job fine: 0 (was 12000 EUR).
+- Cargo damage no longer reduces pay.
+- Late delivery: the job stays valid for 30 days after the deadline.
+
+Order: if Big Money (Alexey) is active, put it ABOVE this mod.

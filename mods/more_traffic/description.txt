@@ -1,0 +1,11 @@
+БОЛЬШЕ ТРАФИКА (личный мод Алексея, только одиночная игра)
+
+Мод снимает общий лимит машин ИИ: max_vehicle_count = 300 (в файле игры закомментирован, по умолчанию 50).
+Саму плотность задаёт настройка g_traffic в config.cfg (у Алексея выставлено 3.0, штатно 1.0, игра принимает от 0 до 10).
+Поменять на ходу: консоль (~) -> g_traffic 4
+
+MORE TRAFFIC (Alexey's personal mod, single player only)
+
+Raises the total AI vehicle limit: max_vehicle_count = 300 (commented out in the game file, default 50).
+Density itself comes from g_traffic in config.cfg (set to 3.0, stock 1.0, the game accepts 0 to 10).
+Change in game: console (~) -> g_traffic 4

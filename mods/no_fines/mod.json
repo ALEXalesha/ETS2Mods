@@ -1,0 +1,23 @@
+{
+  "package": "alexey_no_fines",
+  "file": "alexey_no_fines.scs",
+  "display_name": "No Fines (Alexey)",
+  "category": "other",
+  "version": "1.0",
+  "icon": {"title": "NO FINES", "subtitle": "БЕЗ ШТРАФОВ", "bg": [150, 28, 36], "accent": [255, 214, 0]},
+  "patches": {
+    "def/police_data.sii": [
+      {"key": "fine_factor_base", "value": "0.0"},
+      {"key": "fine_factor_step", "value": "0.0"},
+      {"key": "fine_amounts[*]", "value": "0", "count": 14},
+      {"key": "offence_probabilty[*]", "value": "0.0", "count": 14},
+      {"key": "offence_police_probabilty[*]", "value": "0.0", "count": 14}
+    ],
+    "def/economy_data.sii": [
+      {"key": "abandoned_job_fine", "value": "0"},
+      {"key": "cargo_damage_cost", "value": "0.0"},
+      {"key": "cargo_damage_cost_factor", "value": "0.0"},
+      {"key": "late_delivery_max_overtime[*]", "value": "43200", "count": 3}
+    ]
+  }
+}
