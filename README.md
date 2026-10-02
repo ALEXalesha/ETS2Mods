@@ -216,3 +216,7 @@ To change a value, edit `mods/<name>/mod.json` (operations are described at the 
 - `tools/build_mods.py`, `tools/make_icons.py`: build.
 
 Not for TruckersMP or Convoy. These are single-player mods.
+
+## Steam Workshop
+
+`tools/build_workshop.py` builds neutral "OpenRoad" Workshop folders (`workshop/`, not committed) from the same sources. Upload steps are in [WORKSHOP.md](WORKSHOP.md). The local `alexey_*.scs` builds keep their names so existing saves and the active mod list stay valid.

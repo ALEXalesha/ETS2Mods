@@ -174,3 +174,7 @@ python tools/build_mods.py --install
 ```
 
 Не для TruckersMP и не для Конвоя.
+
+## Мастерская Steam
+
+`tools/build_workshop.py` собирает из тех же исходников папки для Мастерской под нейтральным названием «OpenRoad» (`workshop/`, в git не попадает). Как загружать - в [WORKSHOP.md](WORKSHOP.md). Локальные `alexey_*.scs` сохраняют свои имена, чтобы старые сохранения и список активных модов не сломались.

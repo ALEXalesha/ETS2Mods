@@ -1,0 +1,17 @@
+{
+  "title": "OpenRoad: No Rollover",
+  "short": "NO ROLLOVER",
+  "tag_en": "stiffer anti-roll bar",
+  "tag_ru": "жёстче стабилизатор",
+  "type_tag": "Physics",
+  "en": [
+    "- Front anti-roll bar 3x stiffer (sway_bar_stiffness_factor 1.0 -> 3.0): less body roll in corners.",
+    "- For the biggest effect also set the game options \"Vehicle stability\" and \"Trailer stability\" (Gameplay) to maximum: they lower the centre of gravity.",
+    "Limits: a hard \"never tips over\" is not possible through def files - the centre of gravity comes from the truck models."
+  ],
+  "ru": [
+    "- Передний стабилизатор в 3 раза жёстче (sway_bar_stiffness_factor 1.0 -> 3.0): меньше крен в поворотах.",
+    "- Для полного эффекта поставить в настройках \"Устойчивость транспортного средства\" и \"Устойчивость прицепа\" на максимум: они опускают центр тяжести.",
+    "Ограничения: полностью запретить переворот через def-файлы нельзя - центр тяжести задают модели."
+  ]
+}
