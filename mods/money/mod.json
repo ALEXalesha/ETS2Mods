@@ -3,7 +3,7 @@
   "file": "alexey_money.scs",
   "display_name": "Big Money (Alexey)",
   "category": "other",
-  "version": "1.1",
+  "version": "1.2",
   "icon": {
     "title": "BIG MONEY",
     "subtitle": "ДЕНЬГИ x10",
@@ -18,16 +18,6 @@
       0
     ]
   },
-  "inherit": [
-    [
-      "no_fines",
-      "def/economy_data.sii"
-    ],
-    [
-      "free_services",
-      "def/economy_data.sii"
-    ]
-  ],
   "patches": {
     "def/economy_data.sii": [
       {

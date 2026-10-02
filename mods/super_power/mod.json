@@ -1,0 +1,47 @@
+{
+  "package": "alexey_super_power",
+  "file": "alexey_super_power.scs",
+  "display_name": "Super Power (Alexey)",
+  "category": "physics",
+  "version": "1.0",
+  "icon": {
+    "title": "SUPER POWER",
+    "subtitle": "МОЩНОСТЬ x3",
+    "bg": [
+      150,
+      20,
+      20
+    ],
+    "accent": [
+      255,
+      255,
+      255
+    ]
+  },
+  "patches": {
+    "def/vehicle/truck/*/engine/*.sii": [
+      {
+        "require": "accessory_engine_data",
+        "key": "torque",
+        "scale": 3,
+        "per_unit": "accessory_engine_data"
+      },
+      {
+        "key": "secondary_torque",
+        "scale": 3,
+        "per_unit": "accessory_engine_data",
+        "optional": true
+      }
+    ],
+    "def/vehicle/physics.sii": [
+      {
+        "key": "air_resistance",
+        "value": "1.5"
+      },
+      {
+        "key": "brake_torque_factor",
+        "value": "2.0"
+      }
+    ]
+  }
+}

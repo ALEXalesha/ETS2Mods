@@ -1,0 +1,29 @@
+{
+  "package": "alexey_no_rollover",
+  "file": "alexey_no_rollover.scs",
+  "display_name": "No Rollover (Alexey)",
+  "category": "physics",
+  "version": "1.0",
+  "icon": {
+    "title": "NO ROLLOVER",
+    "subtitle": "НЕ ПЕРЕВОРАЧИВАТЬСЯ",
+    "bg": [
+      20,
+      100,
+      110
+    ],
+    "accent": [
+      255,
+      230,
+      120
+    ]
+  },
+  "patches": {
+    "def/vehicle/physics.sii": [
+      {
+        "key": "sway_bar_stiffness_factor",
+        "value": "3.0"
+      }
+    ]
+  }
+}

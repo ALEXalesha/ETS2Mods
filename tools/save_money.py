@@ -66,7 +66,8 @@ TEXT_BANK = re.compile(r"(^bank\s*:\s*[^\s{]+\s*\{.*?^\s*money_account\s*:\s*)(-
 
 
 def read_money(path):
-    raw = load_plain(open(path, "rb").read())
+    with open(path, "rb") as fh:
+        raw = load_plain(fh.read())
     if raw[:4] == b"BSII":
         b = Bsii(raw)
         banks = b.find("bank")

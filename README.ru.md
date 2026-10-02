@@ -1,81 +1,143 @@
 # EuroTrackMyMods
 
-Личные моды для одиночной игры Euro Truck Simulator 2 (сделаны под версию 1.61.1.1) и маленькие инструменты: распаковщик HashFS, правка денег в сохранении и проверка консольных команд.
+Личные моды для одиночной игры Euro Truck Simulator 2 (под версию 1.61.1.1) и инструменты: распаковщик HashFS, правка денег, уровня и навыков в сохранении, проверка консольных команд и тесты.
 
-| Файл мода | Название в игре | Что делает |
+| Файл | Название в игре | Что делает |
 |---|---|---|
-| `alexey_money.scs` | Big Money (Alexey) | Оплата рейсов примерно в 10 раз выше. Новый профиль начинает с 10 000 000 €. Внутри также экономические правки Free Services и No Fines. |
-| `alexey_free_services.scs` | Free Services (Alexey) | Бесплатное топливо, паромы и поезд через Ла-Манш, вызов помощи и эвакуация, экстренная заправка и зарядка, восстановление износа. Внутри также экономические правки No Fines. |
-| `alexey_no_fines.scs` | No Fines (Alexey) | Все штрафы полиции и камер равны 0, нарушения не засчитываются. Нет штрафа за отказ от груза, повреждение груза не уменьшает оплату, при опоздании рейс в силе 30 дней. |
-| `alexey_no_damage.scs` | No Damage (Alexey) | Грузовик и прицеп не получают урон, нет износа, груз не повреждается. |
-| `alexey_more_traffic.scs` | More Traffic (Alexey) | Поднимает общий лимит машин ИИ до 300. Саму плотность задаёт `g_traffic` в `config.cfg`. |
+| `alexey_super_power.scs` | Super Power (Alexey) | Крутящий момент всех двигателей x3, сопротивление воздуха вдвое меньше, тормоза x2. |
+| `alexey_money.scs` | Big Money (Alexey) | Оплата рейсов примерно x10, новый профиль начинает с 10 000 000 €. |
+| `alexey_free_services.scs` | Free Services (Alexey) | Топливо почти даром, паромы и поезд бесплатно, бесплатные эвакуация, экстренная заправка и зарядка, восстановление износа. |
+| `alexey_no_sleep_fuel.scs` | No Sleep & No Fuel (Alexey) | Водитель не устаёт, двигатели тратят 1/10000 топлива. |
+| `alexey_no_fines.scs` | No Fines (Alexey) | Нет штрафов полиции и камер, нет штрафа за отказ, повреждение груза не уменьшает оплату, 30 дней на опоздание. |
+| `alexey_no_rollover.scs` | No Rollover (Alexey) | Передний стабилизатор в 3 раза жёстче; плюс ползунки устойчивости в настройках. |
+| `alexey_no_damage.scs` | No Damage (Alexey) | Нет урона, износа и повреждения груза. |
+| `alexey_more_traffic.scs` | More Traffic (Alexey) | Лимит машин ИИ 300; плотность задаёт `g_traffic` в config.cfg. |
 
-Оригинальных файлов SCS в репозитории нет. `tools/build_mods.py` берёт их из установленной игры, меняет только перечисленные значения и собирает моды. Если обновление переименует параметр, сборка остановится с ошибкой.
+Оригинальных файлов SCS в репозитории нет. `tools/build_mods.py` берёт их из установленной игры (`def.scs` и архивы `dlc_*.scs`), меняет только нужные значения и собирает моды. Если обновление переименует параметр, сборка остановится с ошибкой.
 
 ## Порядок модов
 
-Подсказка самой игры в Менеджере модов: «Приоритет модов определяется их положением в списке активных модов». Самый верхний - самый главный.
+Подсказка самой игры: «Приоритет модов определяется их положением в списке активных модов». Верхний - главный.
 
-Сверху вниз:
+Сверху вниз (`mods/order.json`):
 
-1. Big Money (Alexey)
-2. Free Services (Alexey)
-3. No Fines (Alexey)
-4. No Damage (Alexey)
-5. More Traffic (Alexey)
-6. всё остальное
+1. Super Power
+2. Big Money
+3. Free Services
+4. No Sleep & No Fuel
+5. No Fines
+6. No Rollover
+7. No Damage
+8. More Traffic
+9. моды Мастерской и прочие
 
-Big Money, Free Services и No Fines все заменяют `def/economy_data.sii`. В каждом, кто выше по списку, уже есть экономические правки тех, кто ниже, поэтому при таком порядке ничего не теряется. Обратная сторона: Big Money в одиночку тоже даёт бесплатную эвакуацию и отменяет штраф за отказ от груза.
+Некоторые наши моды меняют один и тот же файл:
+- `economy_data.sii` - Big Money, Free Services, No Sleep & No Fuel, No Fines;
+- 203 файла двигателей - Super Power, No Sleep & No Fuel;
+- `physics.sii` - Super Power, No Rollover.
 
-Моды из Мастерской, которые заменяют те же файлы (проверено в папке Мастерской):
+Копия файла в каждом моде несёт и правки всех модов ниже по списку, поэтому при таком порядке ничего не теряется. Обратная сторона: мод в одиночку тоже приносит правки нижних. Например, Super Power в одиночку тоже даёт почти нулевой расход и жёсткий стабилизатор.
 
-| Мод Мастерской | Файл | Что делать |
+Моды Мастерской с теми же файлами:
+
+| Мод | Файл | Что делать |
 |---|---|---|
-| Speeding ticket removal (1248269969) | def/police_data.sii | Убирает только штрафы за скорость. Держать ниже No Fines или выключить. |
-| No Damage от rasmusolle (1724816341) | def/damage_data.sii | То же, что наш No Damage. Оставить один. |
-| Brutal Traffic (3103116974) | def/traffic_data.sii | max_vehicle_count 4500 и поведение ИИ. Работает только один traffic_data. |
-| Real Traffic Density (1236032431) | def/traffic_data.sii | max_vehicle_count 500 и дистанции появления машин. |
+| Speeding ticket removal (1248269969) | police_data.sii | Держать ниже No Fines или выключить. |
+| No Damage от rasmusolle (1724816341) | damage_data.sii | То же, что наш No Damage. Оставить один. |
+| Brutal Traffic, Real Traffic Density | traffic_data.sii | Работает только один. |
+| ETS2 Ultra Realistic Truck Physics (3617215611) | physics.sii | Наши Super Power и No Rollover выше него заменят его физику. |
 
-## Что поменяно
+## Что поменяно (файл, параметр, было, стало)
 
-Полные таблицы (файл, параметр, было, стало) - в английском README. Коротко:
+### No Fines
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| police_data.sii | fine_factor_base / fine_factor_step | 0.2 / 0.08 | 0 / 0 |
+| police_data.sii | fine_amounts[0..13] | 100-2000 | 0 |
+| police_data.sii | offence_probabilty, offence_police_probabilty [0..13] | 0-1 | 0 |
+| economy_data.sii | abandoned_job_fine | 12000 | 0 |
+| economy_data.sii | cargo_damage_cost / _factor | 5.0 / 0.04 | 0 / 0 |
+| economy_data.sii | late_delivery_max_overtime[0..2] | 2880 / 720 / 240 мин | 43200 мин |
 
-- No Fines: police_data.sii - все fine_amounts, offence_probabilty, offence_police_probabilty и fine_factor равны 0. economy_data.sii - abandoned_job_fine 12000 -> 0, cargo_damage_cost 5.0 -> 0, cargo_damage_cost_factor 0.04 -> 0, late_delivery_max_overtime -> 43200 мин.
-- No Damage: damage_data.sii - truck_damage_coef и trailer_damage_coef 0.0007 -> 0, dragged_trailer_damage_coef 0.00002 -> 0, truck_to_trailer_dmg 0.2 -> 0, cargo_damage_ratio 1.0 -> 0, весь износ (engine/transmission/wheel/trailer_wheel, обычный и unfixable) -> 0.
-- Free Services: economy_data.sii - tow_price_base 150 -> 0, tow_price_factor 0.4 -> 0, refuel_price_base 150 -> 0, refuel_price_factor 3 -> 0, recharge_price_base 150 -> 0, recharge_price 2 -> 0. service_data.sii - restore у грузовика и прицепа 1000 и 1.1 -> 0. fuel_price во всех 36 странах -> 0. price на всех 19 переправах -> 0.
-- Big Money: revenue_per_km_base 15 -> 150, fixed_revenue 600 -> 6000, стартовые деньги 2000 -> 10 000 000.
-- More Traffic: max_vehicle_count 300. config.cfg: g_traffic 3.0, g_developer 1, g_console 1, g_save_format 2.
+### No Damage
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| damage_data.sii | truck_damage_coef / trailer_damage_coef | 0.0007 | 0 |
+| damage_data.sii | dragged_trailer_damage_coef | 0.00002 | 0 |
+| damage_data.sii | truck_to_trailer_dmg | 0.2 | 0 |
+| damage_data.sii | cargo_damage_ratio | 1.0 | 0 |
+| damage_data.sii | engine/transmission/wheel_wear | 2e-6 | 0 |
+| damage_data.sii | engine/transmission_wear_unfixable / wheel_wear_unfixable | 2e-7 / 2e-5 | 0 |
+| damage_data.sii | trailer_wheel_wear / _unfixable | 2e-6 / 2e-5 | 0 |
 
-## Что не поменяно и почему
+### Free Services
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| economy_data.sii | tow_price_base / tow_price_factor | 150 / 0.4 | 0 / 0 |
+| economy_data.sii | refuel_price_base / refuel_price_factor | 150 / 3 | 0 / 0 |
+| economy_data.sii | recharge_price_base / recharge_price | 150 / 2 | 0 / 0 |
+| service_data.sii | truck/trailer_restore_accessory_fixed_price / _price_coef | 1000 / 1.1 | 0 / 0 |
+| country/*.sui (36 стран) | fuel_price | 0.829-2.555 | 0.0001 |
+| ferry/connection/*.sii (19 переправ) | price | 65-1212 | 0 |
 
-- Платные дороги. Цены пунктов оплаты лежат в данных карты, а не в def-файлах. В exe есть поле экономики `toll_fees`, но его тип и смысл по файлам игры не проверить, поэтому не трогал. То же с `truck_scales_cost` и `oversize_job_cancel_cost`.
-- Ремонт уже полученных повреждений. Цена считается в коде по стоимости деталей. С No Damage новых повреждений нет.
-- Быстрое перемещение. Отдельного параметра цены в def-файлах нет. Вызов помощи (эвакуация) покрыт `tow_price_*`.
+Почему топливо 0.0001, а не 0. С нулём панель заправки показывала «Литров: -nan(ind)». В exe литры считаются как «стоимость / цена» без проверки на ноль; при цене 0 выходит 0/0 = NaN. Итог округляется до целых рублей/евро. При 0.0001 €/л полный бак 1000 л стоит 0,10 €, на экране это 0. Цена за литр показывается как минимальная копейка (около ₽0,01). Тест `tests/test_mods.py` падает, если где-то fuel_price ровно 0.
 
-## Деньги: команды `cheat` в 1.61 нет
+### No Sleep & No Fuel
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| economy_data.sii | maximum_driving_time (мин) | 660 | 10000000 |
+| truck/*/engine/*.sii (203 двигателя, 26 моделей) | consumption_coef | нет | 0.0001 (новая строка) |
 
-`cheat money 1000000` отвечает `unknown command` даже при `g_developer 1` и `g_console 1`. `tools/exe_console_commands.py` показывает 83 описания команд в `eurotrucks2.exe`. 79 из них игра регистрирует. Не регистрируются 4: `cheat` и три команды профайлера. Значит, никакая настройка или параметр запуска `cheat` в этой сборке не включит.
+`consumption_coef` в файлах игры не встречается. По таблице атрибутов в exe это float у `accessory_engine_data`, как `torque`. Ровно 0 не ставится по той же причине деления на ноль (средний расход и запас хода). Самый простой способ отключить сон без мода - снять галочку «Эмуляция усталости» в настройках (`g_fatigue`, сейчас 1).
 
-Что работает вместо:
+### Super Power
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| truck/*/engine/*.sii (203 двигателя) | torque | 1300-3800 Нм | x3 (3900-11400) |
+| то же | secondary_torque (где есть) | разный | x3 |
+| vehicle/physics.sii | air_resistance | 3.0 | 1.5 |
+| vehicle/physics.sii | brake_torque_factor | 1.0 | 2.0 |
 
-1. Big Money: каждый рейс оплачивается примерно в 10 раз выше.
-2. `tools/save_money.py` меняет деньги в сохранении. Сначала закрыть игру.
+Охвачены все 26 моделей игры и установленных DLC (DAF, Iveco, MAN, Mercedes, Renault, Scania, Volvo). Не охвачены грузовики из других модов и неустановленных DLC.
+
+Что ограничивает скорость:
+- Ограничитель скорости - это галочка в настройках (`g_use_speed_limiter`, у Алексея уже 0).
+- Сопротивление воздуха. Сила = air_resistance x скорость²: половина сопротивления даёт примерно +26% скорости, мощность x3 - ещё примерно +44%.
+- Передачи и обороты. Кривые момента кончаются около 2500 об/мин. При овердрайве 0.8, мосте 2.59 и колесе около 0.5 м это примерно 200-225 км/ч. «Бесконечной» скорости без правки коробок и кривых момента не бывает.
+
+### No Rollover
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| vehicle/physics.sii | sway_bar_stiffness_factor (передний стабилизатор) | 1.0 | 3.0 |
+
+Главное средство - в настройках, раздел «Геймплей»: «Устойчивость транспортного средства» (`g_truck_stability`, сейчас 0) и «Устойчивость прицепа» (`g_trailer_stability`, 0.075). По подсказке игры они опускают центр тяжести; поставить оба на максимум. Центр тяжести грузовика задают модели, а не def-файлы, поэтому «никогда не переворачивается» мод гарантировать не может.
+
+### Big Money и прочее
+| Файл | Параметр | Было | Стало |
+|---|---|---|---|
+| economy_data.sii | revenue_per_km_base / fixed_revenue | 15 / 600 | 150 / 6000 |
+| initial_save/normal/game.sii | money_account | 2000 | 10000000 |
+| traffic_data.sii | max_vehicle_count | нет (50) | 300 |
+| config.cfg | g_traffic / g_developer / g_console / g_save_format | 1.0 / 0 / 0 / 0 | 3.0 / 1 / 1 / 2 |
+
+## Правка сохранений (игра закрыта)
+
+Команда `cheat` есть внутри exe 1.61, но не подключена (`tools/exe_console_commands.py`). Поэтому деньги, уровень и навыки меняются прямо в сохранении. Оба скрипта читают шифрованные и текстовые сохранения. Перед записью они копируют папку сохранения в `Documents\Euro Truck Simulator 2\save_backups\`, а `--restore` возвращает последнюю копию.
 
 ```
-python tools/save_money.py                                       # список сохранений и денег
-python tools/save_money.py --save autosave --set 50000000        # пробный прогон, без записи
 python tools/save_money.py --save autosave --set 50000000 --apply
-python tools/save_money.py --save autosave --restore             # вернуть из резервной копии
+python tools/save_profile.py --save autosave                 # опыт, уровень, навыки
+python tools/save_profile.py --save autosave --max           # пробный прогон
+python tools/save_profile.py --save autosave --max --apply
 ```
 
-Скрипт читает обычные зашифрованные сохранения (ScsC + BSII) и текстовые. Перед записью копирует папку сохранения в `Documents\Euro Truck Simulator 2\save_backups\`. Бинарное сохранение записывается обратно как BSII без шифрования, текстовое правится на месте. В `config.cfg` стоит `g_save_format "2"`, поэтому новые сохранения будут текстовыми.
+`--max` ставит опыт для уровня 100 (575 700) и все навыки на максимум: ADR 63 (все 6 классов), остальные пять по 6.
 
-## Пересборка после обновления игры
+## Тесты и пересборка
 
 ```
+.venv\Scripts\python -m unittest discover -s tests -v
 python tools/build_mods.py --install
 ```
 
-Значения меняются в `mods/<имя>/mod.json`. В имени файла можно писать `*`, например `def/country/*.sui`. Иконки: `.venv\Scripts\python tools\make_icons.py`. Пакеты Python для инструментов перечислены в `tools/requirements.txt`, ставить в venv.
-
-Не для TruckersMP и не для Конвоя. Это моды только для одиночной игры.
+Не для TruckersMP и не для Конвоя.

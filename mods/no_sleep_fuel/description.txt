@@ -1,0 +1,14 @@
+БЕЗ СНА И БЕЗ ТОПЛИВА (личный мод Алексея, только одиночная игра)
+
+- Водитель не устаёт: maximum_driving_time 660 мин -> 10 000 000 мин.
+  Самый простой способ без мода - снять галочку "Эмуляция усталости" в Настройках.
+- Расход топлива почти ноль у всех двигателей: consumption_coef = 0.0001
+  (бака хватает на миллионы км; ровно 0 не ставится, чтобы приборка не делила на ноль).
+Порядок: ниже Big Money и Free Services, выше No Fines.
+
+NO SLEEP & NO FUEL (Alexey's personal mod, single player only)
+
+- The driver never gets tired: maximum_driving_time 660 -> 10,000,000 minutes.
+  Without a mod: untick "Fatigue simulation" in the game options.
+- Fuel use of every engine x0.0001 (not exactly 0, so the dashboard never divides by zero).
+Order: below Big Money and Free Services, above No Fines.
