@@ -1,20 +1,25 @@
-# EuroTrackMyMods
+# ETS2Mods - OpenRoad mods for Euro Truck Simulator 2
 
-Personal single-player mods for Euro Truck Simulator 2 (built for game version 1.61.1.1), plus tools: a HashFS reader, save editors for money, level and skills, a console-command checker and a test suite.
+Nine single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the tools that build them from the game's own files: a HashFS reader, save editors for money, level and skills, and a test suite.
 
-| Mod file | In-game name | What it does |
-|---|---|---|
-| `alexey_hyper_power.scs` | Hyper Power (Alexey) | Extreme version of Super Power: torque x12, final drive x0.35, almost no air drag, more grip, brakes x4. Use instead of Super Power. |
-| `alexey_super_power.scs` | Super Power (Alexey) | Torque x3 on every engine, half the air drag, brakes x2. |
-| `alexey_money.scs` | Big Money (Alexey) | About 10x job pay; a new profile starts with 10,000,000 EUR. |
-| `alexey_free_services.scs` | Free Services (Alexey) | Fuel almost free, ferries and the Channel train free, free towing, emergency refuel/recharge and wear restore. |
-| `alexey_no_sleep_fuel.scs` | No Sleep & No Fuel (Alexey) | The driver never gets tired; engines use 1/10000 of the fuel. |
-| `alexey_no_fines.scs` | No Fines (Alexey) | No police or camera fines, no cancel fine, no cargo damage pay cut, 30 days for late jobs. |
-| `alexey_no_rollover.scs` | No Rollover (Alexey) | Front anti-roll bar 3x stiffer; see the stability sliders below. |
-| `alexey_no_damage.scs` | No Damage (Alexey) | No collision damage, no wear, no cargo damage. |
-| `alexey_more_traffic.scs` | More Traffic (Alexey) | AI vehicle limit 300; density is `g_traffic` in config.cfg. |
+> Not affiliated with or endorsed by SCS Software. "Euro Truck Simulator 2" is a trademark of SCS Software. The mods are fan-made and for single player only; they do not work on TruckersMP or in Convoy.
 
-The repository contains no original SCS files. `tools/build_mods.py` reads them from the installed game (`def.scs` and the `dlc_*.scs` archives), changes only the listed values and packs the mods. If a game update renames a parameter, the build stops with an error.
+| Mod (release file) | What it does |
+|---|---|
+| OpenRoad: Hyper Power (`OpenRoad_Hyper_Power.scs`) | Extreme: torque x12, final drive x0.35 (about 460-590 km/h gear-limited), almost no air drag, grip +30%, brakes x4. Use instead of Super Power. |
+| OpenRoad: Super Power (`OpenRoad_Super_Power.scs`) | Torque x3, half the air drag, brakes x2. Still drivable. |
+| OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | About 10x job pay; a new profile starts with 10,000,000 EUR. |
+| OpenRoad: Free Services (`OpenRoad_Free_Services.scs`) | Fuel almost free (0.0001 EUR/l), ferries and the Channel train free, free towing, emergency refuel/recharge and wear restore. |
+| OpenRoad: No Sleep & No Fuel (`OpenRoad_No_Sleep_and_No_Fuel.scs`) | The driver never gets tired; engines use 1/10000 of the fuel. |
+| OpenRoad: No Fines (`OpenRoad_No_Fines.scs`) | No police or camera fines, no cancel fine, no cargo damage pay cut, 30 days for late jobs. |
+| OpenRoad: No Rollover (`OpenRoad_No_Rollover.scs`) | Front anti-roll bar 3x stiffer; plus the game's stability sliders. |
+| OpenRoad: No Damage (`OpenRoad_No_Damage.scs`) | No collision damage, no wear, no cargo damage. |
+| OpenRoad: More Traffic (`OpenRoad_More_Traffic.scs`) | AI vehicle limit 300; density via the game variable `g_traffic`. |
+
+## Install
+
+- **Steam Workshop:** subscribe to the OpenRoad items, then turn them on in the in-game Mod Manager.
+- **From the releases:** download the `.scs` files from the [latest release](../../releases/latest) and put them into `Documents\Euro Truck Simulator 2\mod`. Then turn them on in the Mod Manager (profile -> Mod Manager), in the order below.
 
 ## Load order
 
@@ -31,18 +36,11 @@ Top to bottom (`mods/order.json`):
 7. No Rollover
 8. No Damage
 9. More Traffic
-10. Workshop and other mods
+10. other mods
 
-Some of our mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep & No Fuel, No Fines), the 203 engine files (Super Power, No Sleep & No Fuel) and `def/vehicle/physics.sii` (Super Power, No Rollover). The copy in each mod also carries the changes of every mod below it in this order, so nothing is lost. Hyper Power is the exception: it replaces Super Power ("replaces" in order.json), so it carries No Sleep & No Fuel and No Rollover but not Super Power's x3. The flip side: a mod used alone also brings those lower changes with it. For example, Super Power alone also gives near-zero fuel use and the stiffer anti-roll bar.
+Some mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep & No Fuel, No Fines), the 203 engine files (Hyper/Super Power, No Sleep & No Fuel) and `def/vehicle/physics.sii` (Hyper/Super Power, No Rollover). The game uses only the top-most copy, so each mod also carries the changes of every mod below it in this order, and nothing is lost. Hyper Power replaces Super Power, so it does not carry Super Power's x3. The flip side: a mod used alone also brings the lower mods' changes for the shared files. For example, Big Money alone also gives free towing.
 
-Workshop mods that replace the same files:
-
-| Workshop mod | File | Note |
-|---|---|---|
-| Speeding ticket removal (1248269969) | def/police_data.sii | Only removes speeding fines. Keep No Fines above it or turn it off. |
-| No Damage by rasmusolle (1724816341) | def/damage_data.sii | Same as our No Damage. Keep one. |
-| Brutal Traffic (3103116974), Real Traffic Density (1236032431) | def/traffic_data.sii | Only one traffic_data wins. |
-| ETS2 Ultra Realistic Truck Physics (3617215611) | def/vehicle/physics.sii | Super Power and No Rollover above it replace its physics values. |
+Other mods that replace the same files (`police_data.sii`, `damage_data.sii`, `traffic_data.sii`, `physics.sii`, engine or transmission files) override, or are overridden by, these mods depending on the order.
 
 ## Changed values
 
@@ -92,7 +90,7 @@ Why fuel_price is 0.0001 and not 0: with 0 the refuel panel showed "Litres: -nan
 | def/economy_data.sii | maximum_driving_time (u32, minutes) | 660 | 10000000 |
 | def/vehicle/truck/*/engine/*.sii (203 engines, 26 truck models) | consumption_coef (float) | not set | 0.0001 (new line) |
 
-`consumption_coef` is not used in any stock file. The exe's attribute table lists it for `accessory_engine_data` as a float (type 0x05, like `torque`). It is 0.0001 rather than 0, for the same divide-by-zero reason as the fuel price (dashboard average/range). The cleanest way to turn off sleep without a mod is the game option "Fatigue simulation" (`g_fatigue`, currently 1 in the profile).
+`consumption_coef` is not used in any stock file. The exe's attribute table lists it for `accessory_engine_data` as a float (type 0x05, like `torque`). It is 0.0001 rather than 0, for the same divide-by-zero reason as the fuel price (dashboard average/range). The cleanest way to turn off sleep without a mod is the game option "Fatigue simulation" (`g_fatigue`).
 
 ### Super Power
 
@@ -106,7 +104,7 @@ Why fuel_price is 0.0001 and not 0: with 0 the refuel panel showed "Litres: -nan
 Covered trucks: DAF XF, XF Euro 6, XF Electric, 2021, XD; Iveco Stralis, Hi-Way, S-Way; MAN TGX, TGX Euro 6, TGX 2020; Mercedes Actros, Actros 2014; Renault Magnum, Premium, T, E-Tech T; Scania R, R 2016, S 2016, S 2024E, Streamline; Volvo FH16, FH16 2012, FH 2021, FH 2024. Not covered: trucks from other mods or DLCs not installed, and AI traffic.
 
 What caps the speed:
-- The speed limiter. This is the game option "Speed limiter" (`g_use_speed_limiter`), already 0 in the profile. `game_data` also has `truck_speed_limit` (u32) for when the limiter is on.
+- The speed limiter. This is the game option "Speed limiter" (`g_use_speed_limiter`). `game_data` also has `truck_speed_limit` (u32) for when the limiter is on.
 - Air drag. physics.sii says `resistant_force = air_resistance * speed^2`; halving it raises the drag-limited speed by about 26%, and x3 power adds about 44% more.
 - Gearing and rpm. Torque curves end at about 2500 rpm (e.g. Scania DC13: 0.1 of torque at 2500). With a 0.8 overdrive, a typical 2.6 axle ratio and about 0.5 m tyre radius, that is roughly 200 to 225 km/h. "Infinite" speed is not reachable without editing gearboxes and torque curves.
 - `physics_data` also has a float `user_engine_boost` in the exe, but its effect cannot be checked from the files, so it is not used.
@@ -148,7 +146,7 @@ Low-gear launch: wheel torque is about 4.2x stock (12 x 0.35), so traction contr
 |---|---|---|---|
 | def/vehicle/physics.sii | sway_bar_stiffness_factor (front axle anti-roll bar) | 1.0 | 3.0 |
 
-The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_stability`, profile value 0) and "Trailer stability" (`g_trailer_stability`, 0.075). Per the game's tooltip they lower the centre of gravity; set both to maximum. Truck centre of gravity comes from the vehicle models, not from def files, so "never tips over" cannot be guaranteed by a mod.
+The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_stability`, stock 0) and "Trailer stability" (`g_trailer_stability`). Per the game's tooltip they lower the centre of gravity; set both to maximum. Truck centre of gravity comes from the vehicle models, not from def files, so "never tips over" cannot be guaranteed by a mod.
 
 ### Big Money
 
@@ -158,7 +156,7 @@ The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_s
 | def/economy_data.sii | fixed_revenue | 600 | 6000 |
 | def/initial_save/normal/game.sii | money_account | 2000 | 10000000 |
 
-### More Traffic and config.cfg
+### More Traffic and config.cfg (author's setup)
 
 | File | Parameter | Stock | Now |
 |---|---|---|---|
@@ -217,6 +215,13 @@ To change a value, edit `mods/<name>/mod.json` (operations are described at the 
 
 Not for TruckersMP or Convoy. These are single-player mods.
 
-## Steam Workshop
+## Local builds and the Workshop pack
 
-`tools/build_workshop.py` builds neutral "OpenRoad" Workshop folders (`workshop/`, not committed) from the same sources. Upload steps are in [WORKSHOP.md](WORKSHOP.md). The local `alexey_*.scs` builds keep their names so existing saves and the active mod list stay valid.
+- `python tools/build_mods.py --install` builds the author's local `alexey_*.scs` (same content, own package names) into `build/` and `Documents\Euro Truck Simulator 2\mod`.
+- `python tools/build_workshop.py` builds the public "OpenRoad" versions: Workshop folders in `workshop/` and the release files in `release/`. See [WORKSHOP.md](WORKSHOP.md).
+
+Both read the game's own files from the Steam install; no SCS files are stored in this repository. The build stops with an error if a game update renames a parameter.
+
+## License
+
+The tools and patch definitions are under the MIT License (see LICENSE). The changed def files inside the `.scs` packages are derived from Euro Truck Simulator 2 data by SCS Software.
