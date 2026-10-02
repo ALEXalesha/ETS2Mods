@@ -1,0 +1,15 @@
+{
+  "title": "OpenRoad: No Damage",
+  "short": "NO DAMAGE",
+  "tag_en": "no damage, no wear",
+  "tag_ru": "без урона и износа",
+  "type_tag": "Others",
+  "en": [
+    "- Truck and trailer take no collision damage, there is no wear of engine, transmission and wheels, and cargo is never damaged.",
+    "Limits: damage from before the mod stays until you repair it once."
+  ],
+  "ru": [
+    "- Грузовик и прицеп не получают урон, нет износа двигателя, коробки и колёс, груз не повреждается.",
+    "Ограничения: повреждения, полученные до мода, остаются, пока их один раз не починить."
+  ]
+}

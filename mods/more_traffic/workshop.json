@@ -1,0 +1,15 @@
+{
+  "title": "OpenRoad: More Traffic",
+  "short": "MORE TRAFFIC",
+  "tag_en": "AI limit 300 vehicles",
+  "tag_ru": "лимит машин 300",
+  "type_tag": "AI Traffic",
+  "en": [
+    "- Raises the total AI vehicle limit to 300 (max_vehicle_count; the stock file has it commented out at 50).",
+    "- The density itself is the game variable g_traffic (stock 1.0, the game accepts 0 to 10). Set it in Documents/Euro Truck Simulator 2/config.cfg (uset g_traffic \"3.0\") while the game is closed, or type g_traffic 3 in the developer console. 3 is a good start; 4-5 is heavy in big cities."
+  ],
+  "ru": [
+    "- Поднимает общий лимит машин ИИ до 300 (max_vehicle_count; в файле игры закомментирован, 50).",
+    "- Саму плотность задаёт переменная g_traffic (штатно 1.0, игра принимает от 0 до 10). Поставить в Документы/Euro Truck Simulator 2/config.cfg (uset g_traffic \"3.0\") при закрытой игре или командой g_traffic 3 в консоли разработчика. 3 - хорошее начало, 4-5 в больших городах уже тяжело."
+  ]
+}

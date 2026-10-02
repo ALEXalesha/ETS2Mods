@@ -3,3 +3,4 @@ extracted/
 build/
 __pycache__/
 *.pyc
+workshop/

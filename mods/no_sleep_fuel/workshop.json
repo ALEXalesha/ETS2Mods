@@ -1,0 +1,17 @@
+{
+  "title": "OpenRoad: No Sleep & No Fuel",
+  "short": "NO SLEEP",
+  "tag_en": "no fatigue, no fuel use",
+  "tag_ru": "без сна и расхода",
+  "type_tag": "Others",
+  "en": [
+    "- The driver never gets tired: maximum_driving_time 660 -> 10,000,000 minutes. (Without a mod: untick \"Fatigue simulation\" in the game options.)",
+    "- Every engine of the base game and installed DLCs uses 1/10000 of the fuel (consumption_coef 0.0001, not 0 so the dashboard never divides by zero).",
+    "DLC trucks: the mod also contains engine files of the DLC trucks DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 and FH 2024. Without such a DLC those files are simply unused; the game log may show warnings about them."
+  ],
+  "ru": [
+    "- Водитель не устаёт: maximum_driving_time 660 -> 10 000 000 минут. (Без мода: снять галочку \"Эмуляция усталости\" в настройках.)",
+    "- Все двигатели игры и установленных DLC тратят 1/10000 топлива (consumption_coef 0.0001, не 0, чтобы приборка не делила на ноль).",
+    "DLC-грузовики: мод содержит и файлы двигателей DLC-грузовиков DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 и FH 2024. Без такого DLC эти файлы просто не используются; в логе игры могут быть предупреждения."
+  ]
+}
