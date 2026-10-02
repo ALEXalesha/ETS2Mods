@@ -3,23 +3,75 @@
   "file": "alexey_no_damage.scs",
   "display_name": "No Damage (Alexey)",
   "category": "physics",
-  "version": "1.0",
-  "icon": {"title": "NO DAMAGE", "subtitle": "БЕЗ ПОВРЕЖДЕНИЙ", "bg": [70, 70, 78], "accent": [255, 140, 0]},
+  "version": "1.0.0",
+  "icon": {
+    "title": "NO DAMAGE",
+    "subtitle": "БЕЗ ПОВРЕЖДЕНИЙ",
+    "bg": [
+      70,
+      70,
+      78
+    ],
+    "accent": [
+      255,
+      140,
+      0
+    ]
+  },
   "patches": {
     "def/damage_data.sii": [
-      {"key": "truck_damage_coef", "value": "0.0"},
-      {"key": "trailer_damage_coef", "value": "0.0"},
-      {"key": "dragged_trailer_damage_coef", "value": "0.0"},
-      {"key": "truck_to_trailer_dmg", "value": "0.0"},
-      {"key": "cargo_damage_ratio", "value": "0.0"},
-      {"key": "engine_wear", "value": "0.0"},
-      {"key": "transmission_wear", "value": "0.0"},
-      {"key": "wheel_wear", "value": "0.0"},
-      {"key": "engine_wear_unfixable", "value": "0.0"},
-      {"key": "transmission_wear_unfixable", "value": "0.0"},
-      {"key": "wheel_wear_unfixable", "value": "0.0"},
-      {"key": "trailer_wheel_wear", "value": "0.0"},
-      {"key": "trailer_wheel_wear_unfixable", "value": "0.0"}
+      {
+        "key": "truck_damage_coef",
+        "value": "0.0"
+      },
+      {
+        "key": "trailer_damage_coef",
+        "value": "0.0"
+      },
+      {
+        "key": "dragged_trailer_damage_coef",
+        "value": "0.0"
+      },
+      {
+        "key": "truck_to_trailer_dmg",
+        "value": "0.0"
+      },
+      {
+        "key": "cargo_damage_ratio",
+        "value": "0.0"
+      },
+      {
+        "key": "engine_wear",
+        "value": "0.0"
+      },
+      {
+        "key": "transmission_wear",
+        "value": "0.0"
+      },
+      {
+        "key": "wheel_wear",
+        "value": "0.0"
+      },
+      {
+        "key": "engine_wear_unfixable",
+        "value": "0.0"
+      },
+      {
+        "key": "transmission_wear_unfixable",
+        "value": "0.0"
+      },
+      {
+        "key": "wheel_wear_unfixable",
+        "value": "0.0"
+      },
+      {
+        "key": "trailer_wheel_wear",
+        "value": "0.0"
+      },
+      {
+        "key": "trailer_wheel_wear_unfixable",
+        "value": "0.0"
+      }
     ]
   }
 }

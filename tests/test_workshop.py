@@ -25,9 +25,47 @@ CATEGORIES = {"truck", "trailer", "interior", "tuning_parts", "ai_traffic", "sou
 MANIFEST_FIELDS = ["package_version", "display_name", "author", "category", "icon", "description_file",
                    "compatible_versions"]
 # personal data that must never reach a public upload
-FORBIDDEN = [b"c:\\drive", b"c:/drive", b"Projects", b"Projects", b"gmail", b"192.168.",
-             b"alexey", "алексей".encode(), b"ALEXalesha", "ALEXalesha".encode(), b"aloysha", b"alesha",
-             b"steam\\userdata", b"etcmods", b"gitea"]
+def private_strings():
+    """Personal strings that must never reach a public upload.
+
+    None of them is written in this file (it is public itself): they come from the
+    local git config (user.email, publish.privateName, publish.privateExtra), the
+    Gitea remote, the folder this repository lives in and the Steam user/profile
+    folders on this PC. On a machine without them only the generic checks remain.
+    """
+    import glob
+    import subprocess
+
+    def git(*args):
+        try:
+            return subprocess.run(["git", "-C", ROOT] + list(args), capture_output=True,
+                                  text=True, encoding="utf-8").stdout.strip()
+        except OSError:
+            return ""
+
+    out = {b"gmail.com", b"steam\\userdata", b"steam/userdata"}
+    email = git("config", "user.email")
+    if email:
+        out.add(email.lower().encode())
+    for word in (git("config", "publish.privateName") + " " +
+                 git("config", "publish.privateExtra").replace("|", " ")).split():
+        if len(word) >= 4:
+            out.add(word.lower().encode("utf-8"))
+    origin = git("remote", "get-url", "origin")
+    m = re.match(r"^[a-z]+://([^/:]+)(?::\d+)?/([^/]+)/([^/.]+)", origin)
+    if m:
+        out.update(x.lower().encode() for x in m.groups())
+    parent = os.path.dirname(ROOT)
+    for variant in (parent, parent.replace("\\", "/")):
+        out.add(variant.lower().encode())
+    for d in glob.glob(r"C:\Program Files (x86)\Steam\userdata\*"):
+        out.add(os.path.basename(d).lower().encode())
+        for prof in glob.glob(os.path.join(d, "227300", "remote", "profiles", "*")):
+            out.add(os.path.basename(prof).lower().encode())
+    return sorted(x for x in out if len(x) >= 4)
+
+
+FORBIDDEN = private_strings()
 ZERO_KEYS = ["fuel_price", "consumption_coef", "air_resistance", "differential_ratio", "grip_factor",
              "brake_torque_factor", "torque", "steering_sensitivity_multiplier_minimum"]
 
@@ -113,6 +151,24 @@ class WorkshopTest(unittest.TestCase):
                         for k in ZERO_KEYS:
                             for v in values(text, k):
                                 self.assertGreater(float(v), 0.0, "%s %s %s" % (base, f, k))
+
+    def test_release_assets(self):
+        import zipfile
+        import build_workshop
+        out = tempfile.mkdtemp(prefix="ets2rel_test_")
+        assets = build_workshop.release_assets(folders(), out)
+        scs = [a for a in assets if a.endswith(".scs")]
+        self.assertEqual(len(scs), len(folders()))
+        for a in scs:
+            self.assertTrue(os.path.basename(a).startswith("OpenRoad_"))
+            with zipfile.ZipFile(a) as z:
+                names = z.namelist()
+                self.assertIn("manifest.sii", names)
+                self.assertFalse([n for n in names if n.endswith("/") or "\\" in n])
+                for n in names:
+                    for bad in FORBIDDEN:
+                        self.assertNotIn(bad, z.read(n).lower(), "%s:%s" % (a, n))
+        self.assertTrue(any(a.endswith("OpenRoad_Workshop_Folders.zip") for a in assets))
 
     def test_no_personal_data(self):
         for base in folders():

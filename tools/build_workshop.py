@@ -237,11 +237,44 @@ def build(out_dir, verbose=True):
     return folders
 
 
+def release_assets(folders, out_dir):
+    """Neutral .scs per mod (the universal folder zipped, stored) and one zip of all
+    Workshop folders - the files attached to a release."""
+    import zipfile
+    os.makedirs(out_dir, exist_ok=True)
+    assets = []
+    for base in folders:
+        uni = os.path.join(base, "upload", "universal")
+        name = os.path.basename(base).split("_", 1)[1]          # drop the NN_ order prefix
+        scs = os.path.join(out_dir, name + ".scs")
+        with zipfile.ZipFile(scs, "w", zipfile.ZIP_STORED) as z:
+            for dp, _dn, fn in os.walk(uni):
+                for f in sorted(fn):
+                    full = os.path.join(dp, f)
+                    z.write(full, os.path.relpath(full, uni).replace("\\", "/"))
+        assets.append(scs)
+    allzip = os.path.join(out_dir, "OpenRoad_Workshop_Folders.zip")
+    with zipfile.ZipFile(allzip, "w", zipfile.ZIP_DEFLATED) as z:
+        for base in folders:
+            for dp, _dn, fn in os.walk(base):
+                for f in sorted(fn):
+                    full = os.path.join(dp, f)
+                    z.write(full, os.path.relpath(full, os.path.dirname(base)).replace("\\", "/"))
+    assets.append(allzip)
+    return assets
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "workshop"))
+    ap.add_argument("--release", default=os.path.join(ROOT, "release"),
+                    help="where to put the release .scs files and the Workshop zip")
     a = ap.parse_args()
-    build(a.out)
+    folders = build(a.out)
+    if os.path.isdir(a.release) and os.listdir(a.release):
+        to_recycle_bin(a.release)
+    for f in release_assets(folders, a.release):
+        print("asset:", f)
     return 0
 
 

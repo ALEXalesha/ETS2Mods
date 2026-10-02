@@ -1,0 +1,30 @@
+# Checks on every push.
+#
+# GitHub runners have no Euro Truck Simulator 2 installed, so the tests that read the
+# game files (building the mods and the Workshop folders) skip themselves. What runs
+# here: CityHash vectors and the save-editor logic on synthetic data.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Dependencies
+        run: pip install -r tools/requirements.txt
+
+      - name: Tests
+        run: python -m unittest discover -s tests -v
