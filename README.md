@@ -4,6 +4,7 @@ Personal single-player mods for Euro Truck Simulator 2 (built for game version 1
 
 | Mod file | In-game name | What it does |
 |---|---|---|
+| `alexey_hyper_power.scs` | Hyper Power (Alexey) | Extreme version of Super Power: torque x12, final drive x0.35, almost no air drag, more grip, brakes x4. Use instead of Super Power. |
 | `alexey_super_power.scs` | Super Power (Alexey) | Torque x3 on every engine, half the air drag, brakes x2. |
 | `alexey_money.scs` | Big Money (Alexey) | About 10x job pay; a new profile starts with 10,000,000 EUR. |
 | `alexey_free_services.scs` | Free Services (Alexey) | Fuel almost free, ferries and the Channel train free, free towing, emergency refuel/recharge and wear restore. |
@@ -21,17 +22,18 @@ The game's own Mod Manager hint: "Mods are prioritized from top to bottom in the
 
 Top to bottom (`mods/order.json`):
 
-1. Super Power
-2. Big Money
-3. Free Services
-4. No Sleep & No Fuel
-5. No Fines
-6. No Rollover
-7. No Damage
-8. More Traffic
-9. Workshop and other mods
+1. Hyper Power (or leave it off and use Super Power)
+2. Super Power (turn it off when Hyper Power is on; below Hyper Power it is fully covered and does nothing)
+3. Big Money
+4. Free Services
+5. No Sleep & No Fuel
+6. No Fines
+7. No Rollover
+8. No Damage
+9. More Traffic
+10. Workshop and other mods
 
-Some of our mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep & No Fuel, No Fines), the 203 engine files (Super Power, No Sleep & No Fuel) and `def/vehicle/physics.sii` (Super Power, No Rollover). The copy in each mod also carries the changes of every mod below it in this order, so nothing is lost. The flip side: a mod used alone also brings those lower changes with it. For example, Super Power alone also gives near-zero fuel use and the stiffer anti-roll bar.
+Some of our mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep & No Fuel, No Fines), the 203 engine files (Super Power, No Sleep & No Fuel) and `def/vehicle/physics.sii` (Super Power, No Rollover). The copy in each mod also carries the changes of every mod below it in this order, so nothing is lost. Hyper Power is the exception: it replaces Super Power ("replaces" in order.json), so it carries No Sleep & No Fuel and No Rollover but not Super Power's x3. The flip side: a mod used alone also brings those lower changes with it. For example, Super Power alone also gives near-zero fuel use and the stiffer anti-roll bar.
 
 Workshop mods that replace the same files:
 
@@ -108,6 +110,37 @@ What caps the speed:
 - Air drag. physics.sii says `resistant_force = air_resistance * speed^2`; halving it raises the drag-limited speed by about 26%, and x3 power adds about 44% more.
 - Gearing and rpm. Torque curves end at about 2500 rpm (e.g. Scania DC13: 0.1 of torque at 2500). With a 0.8 overdrive, a typical 2.6 axle ratio and about 0.5 m tyre radius, that is roughly 200 to 225 km/h. "Infinite" speed is not reachable without editing gearboxes and torque curves.
 - `physics_data` also has a float `user_engine_boost` in the exe, but its effect cannot be checked from the files, so it is not used.
+
+### Hyper Power
+
+| File | Parameter | Stock | Mod |
+|---|---|---|---|
+| def/vehicle/truck/*/engine/*.sii (203 engines) | torque, secondary_torque | 1300 to 3800 Nm | x12 (15600 to 45600) |
+| def/vehicle/truck/*/transmission/*.sii (170 gearboxes, 26 trucks) | differential_ratio | 2.38 to 4.83 | x0.35 |
+| def/vehicle/physics.sii | air_resistance | 3.0 | 0.1 (not 0) |
+| def/vehicle/physics.sii | brake_torque_factor | 1.0 | 4.0 |
+| def/vehicle/physics.sii | brake_cooling_rate | 0.01 | 0.05 |
+| def/vehicle/physics.sii | steering_sensitivity_multiplier_minimum | 0.2 | 0.1 |
+| def/vehicle/f_tire, r_tire (31 tyres) | grip_factor (float, code default 1.0) | not set | 1.3 (new line) |
+
+Top speed from the real numbers (`python tools/top_speed.py`). Formula: v = rpm/60 x 2*pi*0.506 m / (top gear x final drive), where 0.506 m is the radius of a 315/70 R22.5 tyre and rpm is where the torque curve ends (median 2200).
+
+| | Top-gear overall ratio (best / median) | Gear-limited top speed |
+|---|---|---|
+| Stock | 2.020 / 2.620 | 208 / 160 km/h |
+| Hyper Power | 0.707 / 0.917 | about 590 / 460 km/h |
+
+At 460 km/h the air drag with a=0.1 needs about 0.2 MW. A x12 engine gives several MW near the end of its curve, so gearing and rpm set the cap, not power (rolling resistance is left out of this estimate). The DAF XF Electric single-speed box (ratio 2.71 after the mod) depends on the motor's 8000 rpm curve.
+
+What still caps it:
+- the end of the torque curve. Rpm and curves were not stretched: automatic shift points (`rpm_range_*`), the tachometers and the engine sounds are tied to them;
+- the physics step: at 130+ m/s a truck moves more than 2 m per physics frame, so thin collisions can be missed;
+- map streaming, which may lag behind;
+- the cab speedometer needle stops at its end mark; the HUD/navigation number keeps counting.
+
+No speed hard cap was found in the exe strings. AI traffic does not react to your speed. Speed cameras fine you only without No Fines.
+
+Low-gear launch: wheel torque is about 4.2x stock (12 x 0.35), so traction control (`g_anti_slip`, on) may cut power on an empty truck. Grip +30% helps. More grip also raises rollover risk in fast corners: keep No Rollover and the stability sliders at max.
 
 ### No Rollover
 

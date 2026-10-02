@@ -1,0 +1,81 @@
+{
+  "package": "alexey_hyper_power",
+  "file": "alexey_hyper_power.scs",
+  "display_name": "Hyper Power (Alexey)",
+  "category": "physics",
+  "version": "1.0",
+  "icon": {
+    "title": "HYPER POWER",
+    "subtitle": "x12 И 500+ КМ/Ч",
+    "bg": [
+      60,
+      0,
+      90
+    ],
+    "accent": [
+      0,
+      240,
+      255
+    ]
+  },
+  "patches": {
+    "def/vehicle/truck/*/engine/*.sii": [
+      {
+        "require": "accessory_engine_data",
+        "key": "torque",
+        "scale": 12,
+        "per_unit": "accessory_engine_data"
+      },
+      {
+        "key": "secondary_torque",
+        "scale": 12,
+        "per_unit": "accessory_engine_data",
+        "optional": true
+      }
+    ],
+    "def/vehicle/truck/*/transmission/*.sii": [
+      {
+        "require": "accessory_transmission_data",
+        "key": "differential_ratio",
+        "scale": 0.35,
+        "per_unit": "accessory_transmission_data"
+      }
+    ],
+    "def/vehicle/physics.sii": [
+      {
+        "key": "air_resistance",
+        "value": "0.1"
+      },
+      {
+        "key": "brake_torque_factor",
+        "value": "4.0"
+      },
+      {
+        "key": "brake_cooling_rate",
+        "value": "0.05"
+      },
+      {
+        "key": "steering_sensitivity_multiplier_minimum",
+        "value": "0.1"
+      }
+    ],
+    "def/vehicle/f_tire/*.sii": [
+      {
+        "require": "accessory_wheel_data",
+        "insert_after_key": "roll_resistance",
+        "per_unit": "accessory_wheel_data",
+        "absent_key": "grip_factor",
+        "line": "grip_factor: 1.3\t# [mod alexey_hyper_power] tyre grip +30% (code default 1.0)"
+      }
+    ],
+    "def/vehicle/r_tire/*.sii": [
+      {
+        "require": "accessory_wheel_data",
+        "insert_after_key": "roll_resistance",
+        "per_unit": "accessory_wheel_data",
+        "absent_key": "grip_factor",
+        "line": "grip_factor: 1.3\t# [mod alexey_hyper_power] tyre grip +30% (code default 1.0)"
+      }
+    ]
+  }
+}

@@ -16,6 +16,8 @@ mods/order.json lists the mods from the top of the in-game Mod Manager list
 file. When several of our mods change the same file (economy_data.sii, the
 engine files, physics.sii), the copy in a mod also carries the changes of every
 mod BELOW it in that list. With the recommended order nothing is lost.
+"replaces" in order.json names mods that are alternatives (Hyper Power replaces
+Super Power): those changes are not inherited.
 
 Patch operations (mod.json, "patches": {path_pattern: [op, ...]}):
   {"key": K, "value": V}                    set an existing value (count: 1)
@@ -188,6 +190,12 @@ def load_spec(name):
         return json.load(fh)
 
 
+def load_replaces():
+    """{"hyper_power": ["super_power"]}: a mod that replaces another does not inherit its changes."""
+    with open(os.path.join(ROOT, "mods", "order.json"), encoding="utf-8") as fh:
+        return json.load(fh).get("replaces", {})
+
+
 def load_order():
     with open(os.path.join(ROOT, "mods", "order.json"), encoding="utf-8") as fh:
         order = json.load(fh)["top_to_bottom"]
@@ -217,7 +225,8 @@ def expand_path(defs, pattern, require=None):
                 if fnmatch.fnmatchcase(name, part):
                     nxt.append(base + "/" + name if base else name)
         cur = nxt
-    hits = sorted(set(cur))
+    # a directory listing can name a file that has no entry (seen in 1.61 def.scs); skip those
+    hits = sorted(h for h in set(cur) if defs.source(h) is not None)
     if require:
         hits = [h for h in hits if require.encode() in defs.read(h)]
     if not hits:
@@ -243,10 +252,13 @@ def own_plan(spec, defs):
 def build_files(name, defs, order, plans, log):
     """Return {archive_path: text}: own patches plus those of mods below in the order."""
     idx = order.index(name)
+    skip = set(load_replaces().get(name, []))
     out = {}
     for path in sorted(plans[name]):
         text = defs.read(path).decode("utf-8")
         for lower in reversed(order[idx + 1:]):          # bottom-most first
+            if lower in skip:
+                continue
             if path in plans[lower]:
                 pkg = load_spec(lower)["package"]
                 for p in plans[lower][path]:

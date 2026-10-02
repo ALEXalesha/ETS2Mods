@@ -107,9 +107,12 @@ class BuiltModsTest(unittest.TestCase):
     def test_cascade_shared_files(self):
         """A shared file in a higher mod carries the changes of every lower mod that touches it."""
         order = build_mods.load_order()
+        replaces = build_mods.load_replaces()
         res = built()
         for i, upper in enumerate(order):
             for lower in order[i + 1:]:
+                if lower in replaces.get(upper, []):
+                    continue
                 shared = set(res[upper]["files"]) & set(res[lower]["files"])
                 shared = {p for p in shared if p.startswith("def/")}
                 lpkg = res[lower]["spec"]["package"]
@@ -134,6 +137,43 @@ class BuiltModsTest(unittest.TestCase):
                 self.assertAlmostEqual(float(n), float(o) * 3, delta=1.0)
         self.assertEqual(got, units)
         self.assertGreaterEqual(units, 200)
+
+    def test_no_zero_divisors(self):
+        """Values the game divides by (or multiplies into a divisor) must never be 0 or negative."""
+        keys = ["fuel_price", "consumption_coef", "air_resistance", "differential_ratio", "grip_factor",
+                "brake_torque_factor", "torque", "steering_sensitivity_multiplier_minimum"]
+        for name, r in built().items():
+            for path, data in r["files"].items():
+                if not path.endswith((".sii", ".sui")):
+                    continue
+                text = data.decode("utf-8")
+                for k in keys:
+                    for v in values(text, k):
+                        self.assertGreater(float(v), 0.0, "%s %s %s=%s" % (name, path, k, v))
+
+    def test_hyper_power(self):
+        """Hyper Power replaces Super Power: torque x12 of stock (not x36), final drive x0.35."""
+        defs = build_mods.LayeredFs(GAME)
+        hp = built()["hyper_power"]["files"]
+        engines = build_mods.expand_path(defs, "def/vehicle/truck/*/engine/*.sii", "accessory_engine_data")
+        trans = build_mods.expand_path(defs, "def/vehicle/truck/*/transmission/*.sii", "accessory_transmission_data")
+        self.assertEqual(len(trans), len([p for p in hp if "/transmission/" in p]))
+        for p in engines:
+            for o, n in zip(values(defs.read(p).decode("utf-8"), "torque"), values(hp[p].decode("utf-8"), "torque")):
+                self.assertAlmostEqual(float(n), float(o) * 12, delta=1.0, msg=p)
+            self.assertNotIn("alexey_super_power", hp[p].decode("utf-8"))
+            self.assertIn("consumption_coef", hp[p].decode("utf-8"))
+        for p in trans:
+            o = values(defs.read(p).decode("utf-8"), "differential_ratio")
+            n = values(hp[p].decode("utf-8"), "differential_ratio")
+            self.assertEqual(len(o), len(n))
+            for a, b in zip(o, n):
+                self.assertAlmostEqual(float(b), float(a) * 0.35, delta=0.001, msg=p)
+        phys = hp["def/vehicle/physics.sii"].decode("utf-8")
+        self.assertEqual(values(phys, "air_resistance"), ["0.1"])
+        self.assertEqual(values(phys, "sway_bar_stiffness_factor"), ["3.0"])   # from No Rollover
+        tires = [p for p in hp if "/f_tire/" in p or "/r_tire/" in p]
+        self.assertEqual(len(tires), 31)
 
     def test_values_that_matter(self):
         res = built()

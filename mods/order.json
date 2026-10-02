@@ -1,5 +1,6 @@
 {
   "top_to_bottom": [
+    "hyper_power",
     "super_power",
     "money",
     "free_services",
@@ -8,5 +9,10 @@
     "no_rollover",
     "no_damage",
     "more_traffic"
-  ]
+  ],
+  "replaces": {
+    "hyper_power": [
+      "super_power"
+    ]
+  }
 }

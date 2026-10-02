@@ -1,0 +1,21 @@
+ГИПЕР МОЩНОСТЬ (личный мод Алексея, только одиночная игра)
+
+Замена Super Power для безумной езды: Super Power при этом выключить
+(или оставить ниже Hyper Power - тогда он ничего не делает).
+- Крутящий момент всех 203 двигателей x12.
+- Главная пара всех 170 коробок x0.35: та же скорость при втрое меньших оборотах,
+  потолок по передачам около 500-650 км/ч.
+- Сопротивление воздуха 3.0 -> 0.1 (не ноль, чтобы ничего не делилось на ноль).
+- Сцепление шин +30% (grip_factor 1.3), тормоза x4 и остывают в 5 раз быстрее.
+- На скорости руль с клавиатуры ещё мягче (минимум чувствительности 0.2 -> 0.1).
+Стрелочный спидометр в кабине упрётся в свой край - смотрите цифры на навигаторе.
+Внутри также правки No Sleep & No Fuel и No Rollover.
+Порядок: САМЫЙ ВЕРХНИЙ.
+
+HYPER POWER (Alexey's personal mod, single player only)
+
+Replaces Super Power (turn Super Power off, or keep it below - it then does nothing).
+- Torque of all 203 engines x12, final drive of all 170 gearboxes x0.35.
+- Air resistance 3.0 -> 0.1 (not 0), tyre grip +30%, brakes x4 with 5x faster cooling.
+Gear-limited top speed roughly 500-650 km/h. The cab speedometer needle hits its end stop.
+Order: put it at the TOP.
