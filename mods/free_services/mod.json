@@ -1,0 +1,31 @@
+{
+  "package": "alexey_free_services",
+  "file": "alexey_free_services.scs",
+  "display_name": "Free Services (Alexey)",
+  "category": "other",
+  "version": "1.0",
+  "icon": {"title": "FREE SERVICES", "subtitle": "ВСЁ БЕСПЛАТНО", "bg": [110, 40, 140], "accent": [120, 255, 160]},
+  "inherit": [["no_fines", "def/economy_data.sii"]],
+  "patches": {
+    "def/economy_data.sii": [
+      {"key": "tow_price_base", "value": "0"},
+      {"key": "tow_price_factor", "value": "0.0"},
+      {"key": "refuel_price_base", "value": "0"},
+      {"key": "refuel_price_factor", "value": "0"},
+      {"key": "recharge_price_base", "value": "0"},
+      {"key": "recharge_price", "value": "0"}
+    ],
+    "def/service_data.sii": [
+      {"key": "truck_restore_accessory_fixed_price", "value": "0"},
+      {"key": "truck_restore_accessory_price_coef", "value": "0.0"},
+      {"key": "trailer_restore_accessory_fixed_price", "value": "0"},
+      {"key": "trailer_restore_accessory_price_coef", "value": "0.0"}
+    ],
+    "def/country/*.sui": [
+      {"key": "fuel_price", "value": "0.0"}
+    ],
+    "def/ferry/connection/*.sii": [
+      {"key": "price", "value": "0"}
+    ]
+  }
+}

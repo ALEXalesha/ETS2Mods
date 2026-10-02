@@ -16,6 +16,7 @@ Usage:
 """
 
 import argparse
+import fnmatch
 import json
 import os
 import re
@@ -91,21 +92,36 @@ def load_spec(name):
         return json.load(fh)
 
 
+def expand_path(defs, path):
+    """A patch key may use * in the file name, e.g. def/country/*.sui.
+    It expands to every matching file in def.scs (directory listing)."""
+    if "*" not in path:
+        return [path]
+    folder, pattern = path.rsplit("/", 1)
+    _dirs, files = defs.listdir(folder)
+    hits = sorted(folder + "/" + f for f in files if fnmatch.fnmatchcase(f, pattern))
+    if not hits:
+        raise PatchError("no files match %s" % path)
+    return hits
+
+
 def build_files(name, spec, defs, log):
     """Return {archive_path: text} for one mod."""
     plan = {}
     for src_mod, path in spec.get("inherit", []):
-        for p in load_spec(src_mod)["patches"][path]:
-            plan.setdefault(path, []).append((src_mod, p))
+        owner = load_spec(src_mod)["package"]
+        for real in expand_path(defs, path):
+            for p in load_spec(src_mod)["patches"][path]:
+                plan.setdefault(real, []).append((owner, p))
     for path, patches in spec["patches"].items():
-        for p in patches:
-            plan.setdefault(path, []).append((spec["package"], p))
+        for real in expand_path(defs, path):
+            for p in patches:
+                plan.setdefault(real, []).append((spec["package"], p))
     out = {}
     for path, patches in plan.items():
         text = defs.read(path).decode("utf-8")
         for owner, p in patches:
-            text = apply_patch(text, p, owner if owner == spec["package"] else load_spec(owner)["package"],
-                               log, path)
+            text = apply_patch(text, p, owner, log, path)
         out[path] = text
     return out
 
@@ -126,15 +142,10 @@ def manifest(spec, version_glob):
 
 
 def write_scs(out_path, files):
-    """files: {archive_path: bytes}. Plain zip, stored (no compression)."""
-    dirs = set()
-    for p in files:
-        parts = p.split("/")[:-1]
-        for i in range(1, len(parts) + 1):
-            dirs.add("/".join(parts[:i]) + "/")
+    """files: {archive_path: bytes}. Plain zip, stored (no compression).
+    No directory entries: with a "def/" entry the game logs
+    "[zipfs] error reading a non-directory entry (/def)"."""
     with zipfile.ZipFile(out_path, "w", zipfile.ZIP_STORED) as z:
-        for d in sorted(dirs):
-            z.writestr(zipfile.ZipInfo(d, date_time=(2026, 1, 1, 0, 0, 0)), b"")
         for p in sorted(files):
             zi = zipfile.ZipInfo(p, date_time=(2026, 1, 1, 0, 0, 0))
             zi.compress_type = zipfile.ZIP_STORED

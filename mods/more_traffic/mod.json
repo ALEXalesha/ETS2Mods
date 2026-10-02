@@ -3,13 +3,28 @@
   "file": "alexey_more_traffic.scs",
   "display_name": "More Traffic (Alexey)",
   "category": "ai_traffic",
-  "version": "1.0",
-  "icon": {"title": "MORE TRAFFIC", "subtitle": "БОЛЬШЕ МАШИН", "bg": [20, 70, 140], "accent": [255, 255, 255]},
+  "version": "1.1",
+  "icon": {
+    "title": "MORE TRAFFIC",
+    "subtitle": "БОЛЬШЕ МАШИН",
+    "bg": [
+      20,
+      70,
+      140
+    ],
+    "accent": [
+      255,
+      255,
+      255
+    ]
+  },
   "patches": {
     "def/traffic_data.sii": [
-      {"insert_after": "traffic_data : .traffic.data {",
-       "absent_key": "max_vehicle_count",
-       "line": "\tmax_vehicle_count: 300\t# [mod alexey_more_traffic] total AI vehicle limit; the commented-out default in the original file is 50"}
+      {
+        "insert_after": "traffic_data : .traffic.data {",
+        "absent_key": "max_vehicle_count",
+        "line": "\tmax_vehicle_count: 300\t# [mod alexey_more_traffic] total AI vehicle limit; the commented-out default in the original file is 50"
+      }
     ]
   }
 }

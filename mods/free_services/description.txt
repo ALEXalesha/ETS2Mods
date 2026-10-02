@@ -1,0 +1,18 @@
+БЕСПЛАТНЫЕ УСЛУГИ (личный мод Алексея, только одиночная игра)
+
+- Топливо бесплатно во всех странах (fuel_price = 0).
+- Паромы и поезд через Ла-Манш бесплатны (price = 0 во всех 19 переправах).
+- Вызов помощи / эвакуация в ближайший сервис бесплатно (tow_price_base, tow_price_factor = 0).
+- Экстренная заправка и экстренная зарядка бесплатно.
+- Восстановление износа в сервисе (restore) бесплатно.
+- Внутри также экономические правки No Fines (отказ от груза, повреждение груза, опоздание).
+Порядок: ставить ВЫШЕ No Fines, но НИЖЕ Big Money.
+Платные дороги (толлы) не меняются: их цена записана в самой карте, а не в def-файлах.
+
+FREE SERVICES (Alexey's personal mod, single player only)
+
+- Free fuel in every country, free ferries and the Channel train.
+- Free emergency call / towing to the nearest service, free emergency refuel and recharge.
+- Free wear restore in the service.
+- Also contains the economy part of No Fines.
+Order: ABOVE No Fines, BELOW Big Money. Road tolls are not changed (they live in the map data).

@@ -1,15 +1,13 @@
 БОЛЬШИЕ ДЕНЬГИ (личный мод Алексея, только одиночная игра)
 
 - Оплата рейсов примерно в 10 раз выше: revenue_per_km_base 15 -> 150, fixed_revenue 600 -> 6000.
-- Новый профиль начинает с 10 000 000 € вместо 2000 € (только для профиля, созданного с включённым модом).
-- Внутри также те же правки экономики, что в No Fines (отказ от груза, повреждение груза, опоздание).
-Порядок: ставить ВЫШЕ мода No Fines (Alexey).
-Деньги сразу: консоль (~) -> cheat money 1000000
+- Новый профиль начинает с 10 000 000 € вместо 2000 €.
+- Внутри также экономические правки No Fines и Free Services (отказ от груза, повреждение груза, опоздание, бесплатная эвакуация и экстренная заправка).
+Порядок: ставить САМЫМ ВЕРХНИМ из модов Алексея.
+Деньги сразу: команды "cheat" в версии 1.61 нет; деньги в сохранении меняет tools\save_money.py.
 
 BIG MONEY (Alexey's personal mod, single player only)
 
-- Job pay about 10x: revenue_per_km_base 15 -> 150, fixed_revenue 600 -> 6000.
-- A new profile starts with 10,000,000 EUR instead of 2000.
-- Also contains the economy part of No Fines.
-Order: put it ABOVE No Fines (Alexey).
-Instant money: console (~) -> cheat money 1000000
+- Job pay about 10x. A new profile starts with 10,000,000 EUR.
+- Also contains the economy parts of No Fines and Free Services.
+Order: put it at the TOP of Alexey's mods.

@@ -1,0 +1,15 @@
+БЕЗ ПОВРЕЖДЕНИЙ (личный мод Алексея, только одиночная игра)
+
+- Грузовик и прицеп не получают урон от столкновений (truck_damage_coef, trailer_damage_coef и др. = 0).
+- Нет износа двигателя, коробки, колёс и колёс прицепа (wear = 0).
+- Груз не повреждается (cargo_damage_ratio = 0).
+Старые повреждения, полученные до мода, остаются - их один раз починить в сервисе.
+Заменяет мод Мастерской "No Damage": держать включённым только один из них.
+
+NO DAMAGE (Alexey's personal mod, single player only)
+
+- Truck and trailer take no collision damage.
+- No wear of engine, transmission, wheels and trailer wheels.
+- Cargo is never damaged.
+Damage from before the mod stays until you repair it once.
+Replaces the Workshop "No Damage" mod: keep only one of them active.

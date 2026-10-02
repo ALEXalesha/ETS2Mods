@@ -3,16 +3,47 @@
   "file": "alexey_money.scs",
   "display_name": "Big Money (Alexey)",
   "category": "other",
-  "version": "1.0",
-  "icon": {"title": "BIG MONEY", "subtitle": "ДЕНЬГИ x10", "bg": [18, 110, 60], "accent": [255, 214, 0]},
-  "inherit": [["no_fines", "def/economy_data.sii"]],
+  "version": "1.1",
+  "icon": {
+    "title": "BIG MONEY",
+    "subtitle": "ДЕНЬГИ x10",
+    "bg": [
+      18,
+      110,
+      60
+    ],
+    "accent": [
+      255,
+      214,
+      0
+    ]
+  },
+  "inherit": [
+    [
+      "no_fines",
+      "def/economy_data.sii"
+    ],
+    [
+      "free_services",
+      "def/economy_data.sii"
+    ]
+  ],
   "patches": {
     "def/economy_data.sii": [
-      {"key": "revenue_per_km_base", "value": "150"},
-      {"key": "fixed_revenue", "value": "6000"}
+      {
+        "key": "revenue_per_km_base",
+        "value": "150"
+      },
+      {
+        "key": "fixed_revenue",
+        "value": "6000"
+      }
     ],
     "def/initial_save/normal/game.sii": [
-      {"key": "money_account", "value": "10000000"}
+      {
+        "key": "money_account",
+        "value": "10000000"
+      }
     ]
   }
 }
