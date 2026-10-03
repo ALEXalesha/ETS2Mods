@@ -10,7 +10,7 @@ modding wiki (SCS Workshop Uploader: validation rules):
       upload/                  <- pick THIS folder in the uploader
           versions.sii         one universal version
           universal/
-              manifest.sii     mod_package with display_name, author, category, icon, ...
+              manifest.sii     mod_package: version, author, category, icon, description
               mod_icon.jpg     276x162 JPG, < 1 MB
               mod_description.txt   UTF-8, EN + RU
               def/...          the changed def files
@@ -239,6 +239,19 @@ def build(out_dir, verbose=True):
     return folders
 
 
+def local_manifest(path, base):
+    """The release .scs is installed into the mod folder, not uploaded: there the game's
+    Mod Manager wants display_name and compatible_versions, so they are put back."""
+    order = build_mods.load_order()
+    name = order[int(os.path.basename(base).split("_", 1)[0]) - 1]
+    glob_ = ".".join(build_mods.game_version(build_mods.DEFAULT_GAME).split(".")[:2]) + ".*"
+    with open(path, encoding="utf-8") as fh:
+        text = fh.read()
+    extra = '\tdisplay_name: "%s"\n\tcompatible_versions[]: "%s"\n' % (ws(name)["title"], glob_)
+    i = text.rindex("}\n}")
+    return text[:i] + extra + text[i:]
+
+
 def release_assets(folders, out_dir):
     """Neutral .scs per mod (the universal folder zipped, stored) and one zip of all
     Workshop folders - the files attached to a release."""
@@ -253,7 +266,11 @@ def release_assets(folders, out_dir):
             for dp, _dn, fn in os.walk(uni):
                 for f in sorted(fn):
                     full = os.path.join(dp, f)
-                    z.write(full, os.path.relpath(full, uni).replace("\\", "/"))
+                    rel = os.path.relpath(full, uni).replace("\\", "/")
+                    if rel == "manifest.sii":
+                        z.writestr(rel, local_manifest(full, base))
+                    else:
+                        z.write(full, rel)
         assets.append(scs)
     allzip = os.path.join(out_dir, "OpenRoad_Workshop_Folders.zip")
     with zipfile.ZipFile(allzip, "w", zipfile.ZIP_DEFLATED) as z:
