@@ -20,6 +20,11 @@ from cityhash103 import cityhash64  # noqa: E402
 
 GAME = build_mods.DEFAULT_GAME
 HAVE_GAME = os.path.isfile(os.path.join(GAME, "def.scs"))
+try:
+    import Crypto  # noqa: F401  (pycryptodome: needed only for encrypted ScsC saves)
+    HAVE_CRYPTO = True
+except ImportError:
+    HAVE_CRYPTO = False
 STEAM_SAVES = glob.glob(r"C:\Program Files (x86)\Steam\userdata\*\227300\remote\profiles\*\save\*\game.sii")
 
 _BUILT = {}
@@ -215,10 +220,18 @@ class SaveToolsTest(unittest.TestCase):
     @unittest.skipUnless(STEAM_SAVES, "no saves on this PC")
     def test_real_saves_parse(self):
         import save_money
+        checked = 0
         for g in STEAM_SAVES[:5]:
+            with open(g, "rb") as fh:
+                encrypted = fh.read(4) == b"ScsC"
+            if encrypted and not HAVE_CRYPTO:
+                continue            # pip install -r tools/requirements.txt (pycryptodome)
+            checked += 1
             kind, _raw, money, _w = save_money.read_money(g)
             self.assertIn(kind, ("binary", "text"))
             self.assertIsInstance(money, int)
+        if not checked:
+            self.skipTest("only encrypted saves here and pycryptodome is not installed")
 
 
 if __name__ == "__main__":
