@@ -1,0 +1,17 @@
+{
+  "title": "OpenRoad: No Fuel",
+  "short": "NO FUEL",
+  "tag_en": "1/10000 fuel use",
+  "tag_ru": "расход 1/10000",
+  "type_tag": "Others",
+  "en": [
+    "- Every engine of the base game and installed DLCs (203 engines, 26 truck models) uses 1/10000 of the fuel: consumption_coef 0.0001.",
+    "- Not exactly 0 on purpose: the dashboard computes range and average consumption by dividing, and 0 would give broken values (same reason the fuel price in OpenRoad: Free Services is 0.0001).",
+    "DLC trucks: the mod also contains engine files of the DLC trucks DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 and FH 2024. Without such a DLC those files are simply unused; the game log may show warnings about them."
+  ],
+  "ru": [
+    "- Все двигатели игры и установленных DLC (203 двигателя, 26 моделей) тратят 1/10000 топлива: consumption_coef 0.0001.",
+    "- Ровно 0 не ставится специально: приборка считает запас хода и средний расход делением, и с нулём показывала бы мусор (по той же причине цена топлива в OpenRoad: Free Services - 0.0001).",
+    "DLC-грузовики: мод содержит и файлы двигателей DLC-грузовиков DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 и FH 2024. Без такого DLC эти файлы просто не используются; в логе игры могут быть предупреждения."
+  ]
+}

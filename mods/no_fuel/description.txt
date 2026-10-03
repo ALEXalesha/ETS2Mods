@@ -1,0 +1,10 @@
+БЕЗ РАСХОДА ТОПЛИВА (личный мод Алексея, только одиночная игра)
+
+- Все 203 двигателя тратят 1/10000 топлива (consumption_coef = 0.0001).
+  Ровно 0 не ставится, чтобы приборка не делила на ноль.
+Порядок: ниже Hyper/Super Power (они уже несут эту правку), выше No Fines.
+
+NO FUEL (Alexey's personal mod, single player only)
+
+- All 203 engines use 1/10000 of the fuel (consumption_coef = 0.0001, not 0: no divide by zero on the dashboard).
+Order: below Hyper/Super Power (they already carry this change), above No Fines.

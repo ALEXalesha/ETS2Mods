@@ -1,0 +1,10 @@
+БЕЗ СНА (личный мод Алексея, только одиночная игра)
+
+- Водитель не устаёт: maximum_driving_time 660 мин -> 10 000 000 мин.
+  Без мода: снять галочку "Эмуляция усталости" в Настройках.
+Порядок: ниже Big Money и Free Services, выше No Fuel и No Fines.
+
+NO SLEEP (Alexey's personal mod, single player only)
+
+- The driver never gets tired: maximum_driving_time 660 -> 10,000,000 minutes.
+Order: below Big Money and Free Services, above No Fuel and No Fines.

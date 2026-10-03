@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 - 2026-10-03
+
+- "No Sleep & No Fuel" is now two separate mods: **OpenRoad: No Sleep** (maximum_driving_time 10,000,000 min) and **OpenRoad: No Fuel** (consumption_coef 0.0001 on all 203 engines). There are 10 mods in total.
+- Load order: No Sleep and No Fuel take the old place of the combined mod (below Free Services, above No Fines). The shared-file chain is unchanged: Big Money and Free Services carry No Sleep; Hyper and Super Power carry No Fuel.
+- Tests: 10 mods; every changed parameter belongs to exactly one mod; the chain carries both new mods; mutation-checked. The personal-data scan treats only the Gitea host as private: the repository names are public.
+
 ## 1.0.0 - 2026-10-03
 
 First public release, for Euro Truck Simulator 2 version 1.61.

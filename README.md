@@ -1,6 +1,6 @@
 # ETS2Mods - OpenRoad mods for Euro Truck Simulator 2
 
-Nine single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the tools that build them from the game's own files: a HashFS reader, save editors for money, level and skills, and a test suite.
+Ten single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the tools that build them from the game's own files: a HashFS reader, save editors for money, level and skills, and a test suite.
 
 > Not affiliated with or endorsed by SCS Software. "Euro Truck Simulator 2" is a trademark of SCS Software. The mods are fan-made and for single player only; they do not work on TruckersMP or in Convoy.
 
@@ -10,7 +10,8 @@ Nine single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the
 | OpenRoad: Super Power (`OpenRoad_Super_Power.scs`) | Torque x3, half the air drag, brakes x2. Still drivable. |
 | OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | About 10x job pay; a new profile starts with 10,000,000 EUR. |
 | OpenRoad: Free Services (`OpenRoad_Free_Services.scs`) | Fuel almost free (0.0001 EUR/l), ferries and the Channel train free, free towing, emergency refuel/recharge and wear restore. |
-| OpenRoad: No Sleep & No Fuel (`OpenRoad_No_Sleep_and_No_Fuel.scs`) | The driver never gets tired; engines use 1/10000 of the fuel. |
+| OpenRoad: No Sleep (`OpenRoad_No_Sleep.scs`) | The driver never gets tired. |
+| OpenRoad: No Fuel (`OpenRoad_No_Fuel.scs`) | Engines use 1/10000 of the fuel. |
 | OpenRoad: No Fines (`OpenRoad_No_Fines.scs`) | No police or camera fines, no cancel fine, no cargo damage pay cut, 30 days for late jobs. |
 | OpenRoad: No Rollover (`OpenRoad_No_Rollover.scs`) | Front anti-roll bar 3x stiffer; plus the game's stability sliders. |
 | OpenRoad: No Damage (`OpenRoad_No_Damage.scs`) | No collision damage, no wear, no cargo damage. |
@@ -31,14 +32,15 @@ Top to bottom (`mods/order.json`):
 2. Super Power (turn it off when Hyper Power is on; below Hyper Power it is fully covered and does nothing)
 3. Big Money
 4. Free Services
-5. No Sleep & No Fuel
-6. No Fines
-7. No Rollover
-8. No Damage
-9. More Traffic
-10. other mods
+5. No Sleep
+6. No Fuel
+7. No Fines
+8. No Rollover
+9. No Damage
+10. More Traffic
+11. other mods
 
-Some mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep & No Fuel, No Fines), the 203 engine files (Hyper/Super Power, No Sleep & No Fuel) and `def/vehicle/physics.sii` (Hyper/Super Power, No Rollover). The game uses only the top-most copy, so each mod also carries the changes of every mod below it in this order, and nothing is lost. Hyper Power replaces Super Power, so it does not carry Super Power's x3. The flip side: a mod used alone also brings the lower mods' changes for the shared files. For example, Big Money alone also gives free towing.
+Some mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep, No Fines), the 203 engine files (Hyper/Super Power, No Fuel) and `def/vehicle/physics.sii` (Hyper/Super Power, No Rollover). The game uses only the top-most copy, so each mod also carries the changes of every mod below it in this order, and nothing is lost. Hyper Power replaces Super Power, so it does not carry Super Power's x3. The flip side: a mod used alone also brings the lower mods' changes for the shared files. For example, Big Money alone also gives free towing.
 
 Other mods that replace the same files (`police_data.sii`, `damage_data.sii`, `traffic_data.sii`, `physics.sii`, engine or transmission files) override, or are overridden by, these mods depending on the order.
 
@@ -83,12 +85,14 @@ Other mods that replace the same files (`police_data.sii`, `damage_data.sii`, `t
 
 Why fuel_price is 0.0001 and not 0: with 0 the refuel panel showed "Litres: -nan(ind)". The panel in `eurotrucks2.exe` (the `gas_station_hud` format `@@diesel_price@@: %s<br>%s: %.2f<br>@@total_price@@: %s`) computes litres as `total_cost / fuel_price` (`divss` at 0xA5B30D, then times 1.0, 0.264172 or 0.219969 for litres, US or imperial gallons). There is no zero check, so 0/0 gives NaN. The total is shown as `floor(cost + 0.5)` in whole currency units. At 0.0001 EUR/l, a 1000 l fill costs 0.10 EUR, which displays as 0. The price line shows the smallest non-zero amount (about RUB 0.01). `tests/test_mods.py` fails if any built fuel_price is exactly 0.
 
-### No Sleep & No Fuel
+### No Sleep and No Fuel
 
-| File | Parameter | Stock | Mod |
-|---|---|---|---|
-| def/economy_data.sii | maximum_driving_time (u32, minutes) | 660 | 10000000 |
-| def/vehicle/truck/*/engine/*.sii (203 engines, 26 truck models) | consumption_coef (float) | not set | 0.0001 (new line) |
+Two separate mods since 1.1.0 (one combined mod before).
+
+| Mod | File | Parameter | Stock | Mod |
+|---|---|---|---|---|
+| No Sleep | def/economy_data.sii | maximum_driving_time (u32, minutes) | 660 | 10000000 |
+| No Fuel | def/vehicle/truck/*/engine/*.sii (203 engines, 26 truck models) | consumption_coef (float) | not set | 0.0001 (new line) |
 
 `consumption_coef` is not used in any stock file. The exe's attribute table lists it for `accessory_engine_data` as a float (type 0x05, like `torque`). It is 0.0001 rather than 0, for the same divide-by-zero reason as the fuel price (dashboard average/range). The cleanest way to turn off sleep without a mod is the game option "Fatigue simulation" (`g_fatigue`).
 

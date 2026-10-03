@@ -1,6 +1,6 @@
 # ETS2Mods - моды OpenRoad для Euro Truck Simulator 2
 
-Девять модов для одиночной игры Euro Truck Simulator 2 (версия 1.61) и инструменты, которые собирают их из файлов самой игры: распаковщик HashFS, правка денег, уровня и навыков в сохранении, тесты.
+Десять модов для одиночной игры Euro Truck Simulator 2 (версия 1.61) и инструменты, которые собирают их из файлов самой игры: распаковщик HashFS, правка денег, уровня и навыков в сохранении, тесты.
 
 > Проект не связан с SCS Software и не одобрен ею. «Euro Truck Simulator 2» - товарный знак SCS Software. Моды фанатские, только для одиночной игры; в TruckersMP и Конвое они не работают.
 
@@ -10,7 +10,8 @@
 | OpenRoad: Super Power (`OpenRoad_Super_Power.scs`) | Момент x3, сопротивление воздуха вдвое меньше, тормоза x2. Управляемо. |
 | OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | Оплата рейсов примерно x10; новый профиль начинает с 10 000 000 €. |
 | OpenRoad: Free Services (`OpenRoad_Free_Services.scs`) | Топливо почти даром (0.0001 €/л), паромы и поезд бесплатно, бесплатные эвакуация, экстренная заправка и восстановление износа. |
-| OpenRoad: No Sleep & No Fuel (`OpenRoad_No_Sleep_and_No_Fuel.scs`) | Водитель не устаёт, двигатели тратят 1/10000 топлива. |
+| OpenRoad: No Sleep (`OpenRoad_No_Sleep.scs`) | Водитель не устаёт. |
+| OpenRoad: No Fuel (`OpenRoad_No_Fuel.scs`) | Водитель не устаёт, двигатели тратят 1/10000 топлива. |
 | OpenRoad: No Fines (`OpenRoad_No_Fines.scs`) | Нет штрафов полиции и камер, нет штрафа за отказ, повреждение груза не уменьшает оплату, 30 дней на опоздание. |
 | OpenRoad: No Rollover (`OpenRoad_No_Rollover.scs`) | Передний стабилизатор в 3 раза жёстче; плюс ползунки устойчивости в настройках. |
 | OpenRoad: No Damage (`OpenRoad_No_Damage.scs`) | Нет урона, износа и повреждения груза. |
@@ -31,16 +32,17 @@
 2. Super Power (выключить, если включён Hyper Power; ниже него он всё равно ничего не делает)
 3. Big Money
 4. Free Services
-5. No Sleep & No Fuel
-6. No Fines
-7. No Rollover
-8. No Damage
-9. More Traffic
-10. другие моды
+5. No Sleep
+6. No Fuel
+7. No Fines
+8. No Rollover
+9. No Damage
+10. More Traffic
+11. другие моды
 
 Некоторые моды меняют один и тот же файл:
-- `economy_data.sii` - Big Money, Free Services, No Sleep & No Fuel, No Fines;
-- 203 файла двигателей - Hyper/Super Power, No Sleep & No Fuel;
+- `economy_data.sii` - Big Money, Free Services, No Sleep, No Fines;
+- 203 файла двигателей - Hyper/Super Power, No Fuel;
 - `physics.sii` - Hyper/Super Power, No Rollover.
 
 Игра берёт только самую верхнюю копию, поэтому каждый мод несёт и правки модов ниже по списку - ничего не теряется. Hyper Power заменяет Super Power и его x3 не несёт. Обратная сторона: мод в одиночку приносит правки нижних в общих файлах. Например, Big Money в одиночку тоже даёт бесплатную эвакуацию.
@@ -80,11 +82,13 @@
 
 Почему топливо 0.0001, а не 0. С нулём панель заправки показывала «Литров: -nan(ind)». В exe литры считаются как «стоимость / цена» без проверки на ноль; при цене 0 выходит 0/0 = NaN. Итог округляется до целых рублей/евро. При 0.0001 €/л полный бак 1000 л стоит 0,10 €, на экране это 0. Цена за литр показывается как минимальная копейка (около ₽0,01). Тест `tests/test_mods.py` падает, если где-то fuel_price ровно 0.
 
-### No Sleep & No Fuel
-| Файл | Параметр | Было | Стало |
-|---|---|---|---|
-| economy_data.sii | maximum_driving_time (мин) | 660 | 10000000 |
-| truck/*/engine/*.sii (203 двигателя, 26 моделей) | consumption_coef | нет | 0.0001 (новая строка) |
+### No Sleep и No Fuel
+С версии 1.1.0 это два отдельных мода (раньше был один общий).
+
+| Мод | Файл | Параметр | Было | Стало |
+|---|---|---|---|---|
+| No Sleep | economy_data.sii | maximum_driving_time (мин) | 660 | 10000000 |
+| No Fuel | truck/*/engine/*.sii (203 двигателя, 26 моделей) | consumption_coef | нет | 0.0001 (новая строка) |
 
 `consumption_coef` в файлах игры не встречается. По таблице атрибутов в exe это float у `accessory_engine_data`, как `torque`. Ровно 0 не ставится по той же причине деления на ноль (средний расход и запас хода). Самый простой способ отключить сон без мода - снять галочку «Эмуляция усталости» в настройках (`g_fatigue`).
 
@@ -113,7 +117,7 @@
 | vehicle/physics.sii | steering_sensitivity_multiplier_minimum | 0.2 | 0.1 |
 | f_tire, r_tire (31 шина) | grip_factor (по умолчанию в коде 1.0) | нет | 1.3 |
 
-Hyper Power заменяет Super Power: правки No Sleep & No Fuel и No Rollover он несёт, а x3 от Super Power - нет.
+Hyper Power заменяет Super Power: правки No Fuel и No Rollover он несёт, а x3 от Super Power - нет.
 
 Максимальная скорость посчитана по реальным числам (`python tools/top_speed.py`). Колесо 315/70 R22.5 - радиус 0.506 м. Обороты - конец кривой момента, в среднем 2200.
 

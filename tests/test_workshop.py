@@ -54,9 +54,11 @@ def private_strings():
         if len(word) >= 4:
             out.add(word.lower().encode("utf-8"))
     origin = git("remote", "get-url", "origin")
-    m = re.match(r"^[a-z]+://([^/:]+)(?::\d+)?/([^/]+)/([^/.]+)", origin)
+    # Only the Gitea HOST is private. The owner nick and the repo name are public: since
+    # the rename the Gitea repo name equals the GitHub one, so it must not be flagged.
+    m = re.match(r"^[a-z]+://([^/:]+)", origin)
     if m:
-        out.update(x.lower().encode() for x in m.groups())
+        out.add(m.group(1).lower().encode())
     parent = os.path.dirname(ROOT)
     for variant in (parent, parent.replace("\\", "/")):
         out.add(variant.lower().encode())
@@ -95,6 +97,12 @@ def folders():
 class WorkshopTest(unittest.TestCase):
     def test_one_folder_per_mod(self):
         self.assertEqual(len(folders()), len(build_mods.load_order()))
+
+    def test_public_names_are_not_private(self):
+        """After the Gitea rename the repo name equals the public GitHub name: only the
+        Gitea host is private, never the owner nick or the repo name."""
+        for public in (b"ets2mods", b"alexalesha", b"github.com/alexalesha/ets2mods"):
+            self.assertFalse(any(bad in public for bad in FORBIDDEN), public)
 
     def test_layout(self):
         for base in folders():

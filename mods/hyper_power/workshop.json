@@ -9,7 +9,7 @@
     "- Engine torque x12, final drive ratio x0.35: the gear-limited top speed is about 460 km/h for a typical gearbox and about 590 km/h for the longest one.",
     "- Air resistance 3.0 -> 0.1 (not zero on purpose), tyre grip +30% (grip_factor 1.3), brakes x4 with 5x faster cooling, softer keyboard steering at speed.",
     "- Use it INSTEAD of OpenRoad: Super Power (turn Super Power off, or keep it below - then it does nothing).",
-    "- Includes the engine part of OpenRoad: No Sleep & No Fuel and the physics part of OpenRoad: No Rollover.",
+    "- Includes the fuel change of OpenRoad: No Fuel and the physics part of OpenRoad: No Rollover.",
     "Limits: the cab speedometer needle stops at its end mark (the HUD number keeps counting); at 130+ m/s the physics step can miss thin obstacles; an empty truck may spin its wheels in low gears (traction control cuts power).",
     "Not compatible with other mods that replace def/vehicle/physics.sii or the engine/transmission files of the stock trucks (they override each other).",
     "DLC trucks: the mod also contains engine files of the DLC trucks DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 and FH 2024. Without such a DLC those files are simply unused; the game log may show warnings about them."
@@ -19,7 +19,7 @@
     "- Крутящий момент x12, главная пара x0.35: потолок по передачам около 460 км/ч у типичной коробки и около 590 км/ч у самой длинной.",
     "- Сопротивление воздуха 3.0 -> 0.1 (специально не ноль), сцепление шин +30%, тормоза x4 и остывают в 5 раз быстрее, мягче руль с клавиатуры на скорости.",
     "- Ставить ВМЕСТО OpenRoad: Super Power (Super Power выключить или оставить ниже - тогда он ничего не делает).",
-    "- Внутри также двигательная часть OpenRoad: No Sleep & No Fuel и физика OpenRoad: No Rollover.",
+    "- Внутри также правка расхода OpenRoad: No Fuel и физика OpenRoad: No Rollover.",
     "Ограничения: стрелка спидометра в кабине упирается в край (цифры на HUD растут дальше); на 130+ м/с шаг физики может проскочить тонкие препятствия; пустой грузовик буксует на низших передачах.",
     "Несовместим с другими модами, заменяющими physics.sii, двигатели или коробки стандартных грузовиков.",
     "DLC-грузовики: мод содержит и файлы двигателей DLC-грузовиков DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 и FH 2024. Без такого DLC эти файлы просто не используются; в логе игры могут быть предупреждения."

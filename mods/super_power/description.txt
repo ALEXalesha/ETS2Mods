@@ -5,7 +5,7 @@
 - Тормоза x2 (brake_torque_factor 1.0 -> 2.0), чтобы машина оставалась управляемой.
 - Ограничитель скорости выключается в Настройках игры (у Алексея уже выключен).
 Бесконечной скорости нет: её режут передачи, предел оборотов двигателя и воздух.
-Внутри также правки No Sleep & No Fuel (расход топлива) и No Rollover (стабилизатор).
+Внутри также правки No Fuel (расход топлива) и No Rollover (стабилизатор).
 Порядок: САМЫЙ ВЕРХНИЙ из модов Алексея.
 
 SUPER POWER (Alexey's personal mod, single player only)
@@ -14,5 +14,5 @@ SUPER POWER (Alexey's personal mod, single player only)
 - Air resistance 3.0 -> 1.5 for a higher top speed; brakes x2 to stay drivable.
 - Speed limiter is an option in the game settings.
 Top speed is not infinite: gearing, engine rpm limit and air drag cap it.
-Also carries the engine part of No Sleep & No Fuel and the physics part of No Rollover.
+Also carries the fuel change of No Fuel and the physics part of No Rollover.
 Order: put it at the TOP of Alexey's mods.
