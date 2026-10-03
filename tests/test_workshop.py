@@ -98,7 +98,8 @@ class WorkshopTest(unittest.TestCase):
 
     def test_layout(self):
         for base in folders():
-            self.assertEqual(sorted(os.listdir(base)), ["preview.jpg", "steam_page.txt", "upload"])
+            self.assertEqual(sorted(os.listdir(base)),
+                             ["preview.jpg", "steam_description.txt", "steam_page.txt", "upload"])
             self.assertEqual(sorted(os.listdir(os.path.join(base, "upload"))), ["universal", "versions.sii"])
             v = rb(os.path.join(base, "upload", "versions.sii"))
             self.assertTrue(v.startswith(b"SiiNunit"))
@@ -130,6 +131,20 @@ class WorkshopTest(unittest.TestCase):
             self.assertLess(len(prev), 1024 * 1024)
             page = rt(os.path.join(base, "steam_page.txt"))
             self.assertGreater(len(page.split("DESCRIPTION", 1)[1]), 50)
+
+    def test_paste_files_crlf(self):
+        # The uploader's description box is a plain Windows edit field: a bare LF is dropped
+        # on paste and the whole text becomes one paragraph. Files meant for copy-paste use CRLF.
+        for base in folders():
+            for name in ("steam_page.txt", "steam_description.txt"):
+                data = rb(os.path.join(base, name))
+                self.assertGreater(data.count(b"\n"), 5, name)
+                self.assertEqual(data.count(b"\n"), data.count(b"\r\n"), "%s: bare LF in %s" % (base, name))
+            only = rt(os.path.join(base, "steam_description.txt"))
+            self.assertTrue(only.startswith("[b]"), base)      # just the text, nothing to cut off
+            self.assertIn("\r\n\r\n", only)
+            self.assertIn("-----", only)
+            self.assertIn(only, rt(os.path.join(base, "steam_page.txt")))
 
     def test_files_valid_for_uploader(self):
         for base in folders():
