@@ -22,8 +22,10 @@ from test_mods import HAVE_GAME, jpeg_size, values  # noqa: E402
 
 CATEGORIES = {"truck", "trailer", "interior", "tuning_parts", "ai_traffic", "sound", "paint_job", "cargo_pack",
               "map", "ui", "weather_setup", "physics", "graphics", "models", "movers", "walkers", "prefabs", "other"}
-MANIFEST_FIELDS = ["package_version", "display_name", "author", "category", "icon", "description_file",
-                   "compatible_versions"]
+MANIFEST_FIELDS = ["package_version", "author", "category", "icon", "description_file"]
+# The SCS Workshop Uploader rejects these in Workshop packages (ERROR 00010 for compatible_versions,
+# WARN 00002 for display_name): versions come from versions.sii and the name from the Steam page.
+WORKSHOP_FORBIDDEN = ["compatible_versions", "display_name"]
 # personal data that must never reach a public upload
 def private_strings():
     """Personal strings that must never reach a public upload.
@@ -112,7 +114,8 @@ class WorkshopTest(unittest.TestCase):
                 self.assertRegex(man, r"(?m)^\s*%s(\[\])?\s*:" % f, "%s: %s missing" % (base, f))
             for c in re.findall(r'category\[\]\s*:\s*"([^"]+)"', man):
                 self.assertIn(c, CATEGORIES)
-            self.assertIn('compatible_versions[]: "1.61.*"', man)
+            for f in WORKSHOP_FORBIDDEN:
+                self.assertNotRegex(man, r"(?m)^\s*%s(\[\])?\s*:" % f, "%s: %s must not be in a Workshop manifest" % (base, f))
             icon = rb(os.path.join(uni, "mod_icon.jpg"))
             self.assertEqual(jpeg_size(icon), (276, 162))
             self.assertLess(len(icon), 1024 * 1024)

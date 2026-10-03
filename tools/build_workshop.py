@@ -92,19 +92,21 @@ def description(name, order, version_glob):
     return "\n".join(en + ru) + "\n"
 
 
-def manifest(name, spec, version_glob):
+def manifest(spec):
+    # No display_name and no compatible_versions: the SCS Workshop Uploader rejects
+    # compatible_versions in Workshop packages (ERROR 00010, versions come from versions.sii)
+    # and warns on display_name (WARN 00002, the name comes from the Steam page).
+    # The local .scs builds (build_mods.py) keep both, the game's mod manager needs them.
     return (
         "SiiNunit\n{\n"
         "mod_package : .package_name\n{\n"
         '\tpackage_version: "%s"\n'
-        '\tdisplay_name: "%s"\n'
         '\tauthor: "%s"\n'
         '\tcategory[]: "%s"\n'
         '\ticon: "mod_icon.jpg"\n'
         '\tdescription_file: "mod_description.txt"\n'
-        '\tcompatible_versions[]: "%s"\n'
         "}\n}\n"
-    ) % (spec["version"], ws(name)["title"], AUTHOR, spec["category"], version_glob)
+    ) % (spec["version"], AUTHOR, spec["category"])
 
 
 VERSIONS_SII = (
@@ -224,7 +226,7 @@ def build(out_dir, verbose=True):
             with open(dst, "wb") as fh:
                 fh.write(data)
         with open(os.path.join(uni, "manifest.sii"), "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(manifest(name, spec, r["version_glob"]))
+            fh.write(manifest(spec))
         desc = description(name, order, r["version_glob"])
         with open(os.path.join(uni, "mod_description.txt"), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(desc)
