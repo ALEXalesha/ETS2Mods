@@ -62,6 +62,10 @@ for x in "${EXTRA[@]:-}"; do add "$x" "$PUBLIC_NAME"; done
 add "$WIN_PARENT" "C:/Projects"
 add "${WIN_PARENT//\//\\}" 'C:\Projects'
 add "$(cd .. && pwd)" "/c/Projects"
+REL_PARENT="${WIN_PARENT#*:/}"                     # the folder path without the drive
+add "$REL_PARENT" "Projects"
+add "${REL_PARENT//\//\\}" "Projects"
+add "${REL_PARENT//\//\\\\}" "Projects"            # as written inside Python strings
 for d in "/c/Program Files (x86)/Steam/userdata/"*/; do
   [ -d "$d" ] || continue
   add "$(basename "$d")" "0"
