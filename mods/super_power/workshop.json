@@ -8,7 +8,7 @@
     "Strong but drivable power boost for every truck of the base game and installed DLCs (203 engines, 26 truck models).",
     "- Engine torque x3, air resistance 3.0 -> 1.5, brakes x2.",
     "- Top speed is still capped by gearing and the end of the torque curves (roughly 200-225 km/h with the longest gearboxes). The speed limiter is a game option (Gameplay - Speed limiter).",
-    "- Includes the engine part of OpenRoad: No Sleep & No Fuel and the physics part of OpenRoad: No Rollover.",
+    "- Includes the fuel change of OpenRoad: No Fuel and the physics part of OpenRoad: No Rollover.",
     "Not compatible with other mods that replace def/vehicle/physics.sii or the engine files of the stock trucks.",
     "DLC trucks: the mod also contains engine files of the DLC trucks DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 and FH 2024. Without such a DLC those files are simply unused; the game log may show warnings about them."
   ],
@@ -16,7 +16,7 @@
     "Сильная, но управляемая прибавка мощности для всех грузовиков игры и установленных DLC (203 двигателя, 26 моделей).",
     "- Крутящий момент x3, сопротивление воздуха 3.0 -> 1.5, тормоза x2.",
     "- Скорость по-прежнему ограничена передачами и концом кривой момента (примерно 200-225 км/ч с самыми длинными коробками). Ограничитель скорости - опция игры (Геймплей - Ограничитель скорости).",
-    "- Внутри также двигательная часть OpenRoad: No Sleep & No Fuel и физика OpenRoad: No Rollover.",
+    "- Внутри также правка расхода OpenRoad: No Fuel и физика OpenRoad: No Rollover.",
     "Несовместим с другими модами, заменяющими physics.sii или двигатели стандартных грузовиков.",
     "DLC-грузовики: мод содержит и файлы двигателей DLC-грузовиков DAF XF Electric, DAF 2021, DAF XD, Iveco S-Way, MAN TGX 2020, Renault E-Tech T, Scania S 2024E, Volvo FH 2021 и FH 2024. Без такого DLC эти файлы просто не используются; в логе игры могут быть предупреждения."
   ]

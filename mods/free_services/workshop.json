@@ -8,14 +8,14 @@
     "- Fuel costs 0.0001 EUR per litre in all 36 countries: a full tank costs 0. It is not exactly 0 on purpose: with 0 the refuel panel divides by zero and shows \"Litres: -nan(ind)\".",
     "- All 19 ferry and train crossings are free.",
     "- Free emergency call / towing to the nearest service, free emergency refuel and recharge, free wear restore in the service.",
-    "- Includes the economy parts of OpenRoad: No Sleep & No Fuel and No Fines.",
+    "- Includes the economy parts of OpenRoad: No Sleep and No Fines.",
     "Limits: road tolls are not free (their prices are stored in the map data, not in def files); repairing existing damage still costs money."
   ],
   "ru": [
     "- Топливо стоит 0.0001 € за литр во всех 36 странах: полный бак - 0. Ровно 0 не ставится специально: с нулём панель заправки делит на ноль и пишет \"Литров: -nan(ind)\".",
     "- Все 19 паромов и поездов бесплатны.",
     "- Бесплатные вызов помощи / эвакуация в ближайший сервис, экстренная заправка и зарядка, восстановление износа.",
-    "- Внутри также экономические правки OpenRoad: No Sleep & No Fuel и No Fines.",
+    "- Внутри также экономические правки OpenRoad: No Sleep и No Fines.",
     "Ограничения: платные дороги не бесплатны (их цены записаны в карте, а не в def-файлах); ремонт уже полученных повреждений платный."
   ]
 }

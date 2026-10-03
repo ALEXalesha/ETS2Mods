@@ -1,0 +1,29 @@
+{
+  "package": "alexey_no_sleep",
+  "file": "alexey_no_sleep.scs",
+  "display_name": "No Sleep (Alexey)",
+  "category": "other",
+  "version": "1.1.0",
+  "icon": {
+    "title": "NO SLEEP",
+    "subtitle": "БЕЗ СНА",
+    "bg": [
+      25,
+      35,
+      80
+    ],
+    "accent": [
+      255,
+      220,
+      90
+    ]
+  },
+  "patches": {
+    "def/economy_data.sii": [
+      {
+        "key": "maximum_driving_time",
+        "value": "10000000"
+      }
+    ]
+  }
+}

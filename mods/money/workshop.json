@@ -7,11 +7,11 @@
   "en": [
     "- Job pay about 10x: revenue_per_km_base 15 -> 150, fixed_revenue 600 -> 6000.",
     "- A NEW profile starts with 10,000,000 EUR instead of 2,000 (existing profiles keep their money).",
-    "- Includes the economy parts of OpenRoad: Free Services, No Sleep & No Fuel and No Fines (free towing, no cancel fine, no cargo damage pay cut, no fatigue)."
+    "- Includes the economy parts of OpenRoad: Free Services, No Sleep and No Fines (free towing, no cancel fine, no cargo damage pay cut, no fatigue)."
   ],
   "ru": [
     "- Оплата рейсов примерно x10: revenue_per_km_base 15 -> 150, fixed_revenue 600 -> 6000.",
     "- НОВЫЙ профиль начинает с 10 000 000 € вместо 2000 € (у старых профилей деньги не меняются).",
-    "- Внутри также экономические правки OpenRoad: Free Services, No Sleep & No Fuel и No Fines (бесплатная эвакуация, нет штрафа за отказ, повреждение груза не уменьшает оплату, нет усталости)."
+    "- Внутри также экономические правки OpenRoad: Free Services, No Sleep и No Fines (бесплатная эвакуация, нет штрафа за отказ, повреждение груза не уменьшает оплату, нет усталости)."
   ]
 }

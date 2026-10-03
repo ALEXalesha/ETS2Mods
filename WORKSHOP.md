@@ -4,7 +4,7 @@
 
 ## English
 
-The nine mods are prepared as Workshop folders under the neutral family name "OpenRoad". Nothing is uploaded automatically; you upload them yourself with SCS's official Workshop Uploader.
+The ten mods are prepared as Workshop folders under the neutral family name "OpenRoad". Nothing is uploaded automatically; you upload them yourself with SCS's official Workshop Uploader.
 
 ### 0. Build the folders (once, and again after every change)
 
@@ -52,7 +52,7 @@ Following the SCS modding wiki ("How to upload new mod?"):
 - Check it in game (see the README for what to check per mod).
 - Then set the visibility to **Friends only** or **Public**, on the item's Steam page or with **Update** in the uploader.
 
-Suggested upload order: start with a small one as a test (09 More Traffic), then the rest in any order. Order does not matter for uploading. What matters is the order in the Mod Manager: 01 at the top, 09 at the bottom, with 02 Super Power off when 01 Hyper Power is on.
+Suggested upload order: start with a small one as a test (10 More Traffic), then the rest in any order. Order does not matter for uploading. What matters is the order in the Mod Manager: 01 at the top, 10 at the bottom, with 02 Super Power off when 01 Hyper Power is on.
 
 ### 5. After a game update
 
@@ -62,7 +62,7 @@ Suggested upload order: start with a small one as a test (09 More Traffic), then
 
 ## Русский
 
-Девять модов подготовлены как папки для Мастерской под нейтральным названием серии «OpenRoad». Сам я ничего не выкладывал; загружать их нужно самому через официальный загрузчик SCS.
+Десять модов подготовлены как папки для Мастерской под нейтральным названием серии «OpenRoad». Сам я ничего не выкладывал; загружать их нужно самому через официальный загрузчик SCS.
 
 ### 0. Собрать папки (один раз и после каждой правки)
 
@@ -109,7 +109,7 @@ Steam -> Библиотека -> фильтр над списком игр («И
 - Проверить в игре (что смотреть - в README).
 - Потом поставить видимость **Friends only** или **Public** на странице мода в Steam или через **Update** в загрузчике.
 
-Порядок загрузки: сначала маленький для пробы (09 More Traffic), потом остальные в любом порядке. Для загрузки порядок не важен. Важен порядок в Менеджере модов: 01 сверху, 09 снизу, а 02 Super Power выключить, если включён 01 Hyper Power.
+Порядок загрузки: сначала маленький для пробы (10 More Traffic), потом остальные в любом порядке. Для загрузки порядок не важен. Важен порядок в Менеджере модов: 01 сверху, 10 снизу, а 02 Super Power выключить, если включён 01 Hyper Power.
 
 ### 5. После обновления игры
 

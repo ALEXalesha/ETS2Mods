@@ -1,0 +1,32 @@
+{
+  "package": "alexey_no_fuel",
+  "file": "alexey_no_fuel.scs",
+  "display_name": "No Fuel (Alexey)",
+  "category": "other",
+  "version": "1.1.0",
+  "icon": {
+    "title": "NO FUEL",
+    "subtitle": "БЕЗ РАСХОДА ТОПЛИВА",
+    "bg": [
+      70,
+      50,
+      15
+    ],
+    "accent": [
+      255,
+      170,
+      40
+    ]
+  },
+  "patches": {
+    "def/vehicle/truck/*/engine/*.sii": [
+      {
+        "require": "accessory_engine_data",
+        "insert_after_key": "torque",
+        "per_unit": "accessory_engine_data",
+        "absent_key": "consumption_coef",
+        "line": "consumption_coef: 0.0001\t# [mod alexey_no_fuel] fuel use x0.0001; not 0, so the dashboard range/average never divide by zero"
+      }
+    ]
+  }
+}

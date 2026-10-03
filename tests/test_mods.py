@@ -180,6 +180,53 @@ class BuiltModsTest(unittest.TestCase):
         tires = [p for p in hp if "/f_tire/" in p or "/r_tire/" in p]
         self.assertEqual(len(tires), 31)
 
+    def test_split_no_sleep_and_no_fuel(self):
+        """v1.1.0: the combined No Sleep & No Fuel is two mods; 10 mods in total."""
+        order = build_mods.load_order()
+        self.assertEqual(len(order), 10)
+        self.assertIn("no_sleep", order)
+        self.assertIn("no_fuel", order)
+        self.assertNotIn("no_sleep_fuel", order)
+        res = built()
+        sleep_files = {p for p in res["no_sleep"]["files"] if p.startswith("def/")}
+        fuel_files = {p for p in res["no_fuel"]["files"] if p.startswith("def/")}
+        self.assertEqual(sleep_files, {"def/economy_data.sii"})
+        self.assertTrue(fuel_files)
+        self.assertTrue(all("/engine/" in p for p in fuel_files))
+        self.assertFalse(sleep_files & fuel_files)             # the two never overwrite each other
+        econ = res["no_sleep"]["files"]["def/economy_data.sii"].decode("utf-8")
+        self.assertEqual(values(econ, "maximum_driving_time"), ["10000000"])
+        self.assertIn("[mod alexey_no_fines", econ)            # chain: carries No Fines below it
+        for p in fuel_files:
+            self.assertEqual(len(values(res["no_fuel"]["files"][p].decode("utf-8"), "consumption_coef")),
+                             len(re.findall(r"^\s*accessory_engine_data\s*:",
+                                            res["no_fuel"]["files"][p].decode("utf-8"), re.M)))
+
+    def test_each_own_patch_in_exactly_one_mod(self):
+        """A parameter is changed by exactly one mod (the others only carry it through the chain)."""
+        owners = {}
+        for name in build_mods.load_order():
+            for pattern, ops in build_mods.load_spec(name)["patches"].items():
+                for op in ops:
+                    key = op.get("key") or op.get("line", "").split(":")[0].strip()
+                    owners.setdefault((pattern, key), set()).add(name)
+        shared = {k: v for k, v in owners.items() if len(v) > 1}
+        # Hyper Power and Super Power are alternatives (order.json "replaces") and both scale torque
+        allowed = {k for k, v in shared.items() if v == {"hyper_power", "super_power"}}
+        self.assertEqual(set(shared) - allowed, set(), shared)
+
+    def test_chain_carries_the_split_mods(self):
+        res = built()
+        for upper in ("money", "free_services"):
+            econ = res[upper]["files"]["def/economy_data.sii"].decode("utf-8")
+            self.assertIn("[mod alexey_no_sleep:", econ, upper)
+            self.assertEqual(values(econ, "maximum_driving_time"), ["10000000"], upper)
+        for upper in ("hyper_power", "super_power"):
+            engines = [p for p in res[upper]["files"] if "/engine/" in p]
+            self.assertTrue(engines)
+            for p in engines:
+                self.assertIn("[mod alexey_no_fuel]", res[upper]["files"][p].decode("utf-8"), p)
+
     def test_values_that_matter(self):
         res = built()
         econ = res["money"]["files"]["def/economy_data.sii"].decode("utf-8")
