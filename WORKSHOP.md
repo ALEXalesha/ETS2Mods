@@ -15,7 +15,7 @@ The nine mods are prepared as Workshop folders under the neutral family name "Op
 ```
 
 This gives `workshop\NN_OpenRoad_<Name>\` with:
-- `upload\`: the mod data folder you pick in the uploader. It holds `versions.sii` and `universal\` (manifest.sii, mod_icon.jpg 276x162, mod_description.txt EN+RU, def files);
+- `upload\`: the mod data folder you pick in the uploader. It holds `versions.sii` and `universal\` (manifest.sii without display_name/compatible_versions, mod_icon.jpg 276x162, mod_description.txt EN+RU, def files);
 - `preview.jpg`: the 640x360 Workshop preview image;
 - `steam_page.txt`: the title, type tag and page text to paste.
 
@@ -54,7 +54,7 @@ Suggested upload order: start with a small one as a test (09 More Traffic), then
 
 ### 5. After a game update
 
-1. Rebuild (step 0). `compatible_versions` comes from the game's `version.scs` automatically, and the build stops with an error if SCS renamed a parameter.
+1. Rebuild (step 0). The build stops with an error if SCS renamed a parameter. Workshop packages carry no `compatible_versions` and no `display_name` in manifest.sii: the uploader rejects the first (ERROR 00010, versions belong in versions.sii) and warns about the second (WARN 00002, the name comes from the Steam page). The game version in the description is taken from the game files automatically.
 2. In the uploader choose **Update** (not New), pick the existing item, choose the new `upload` folder, write a change note such as "Updated for game 1.62", then press Upload.
 3. The Workshop item keeps its ID, subscribers and comments.
 
@@ -109,6 +109,6 @@ Steam -> Библиотека -> фильтр над списком игр («И
 
 ### 5. После обновления игры
 
-1. Пересобрать (шаг 0). `compatible_versions` подставится из `version.scs` игры сам. Если SCS переименует параметр, сборка остановится с ошибкой.
+1. Пересобрать (шаг 0). Если SCS переименует параметр, сборка остановится с ошибкой. В manifest.sii пакетов Мастерской нет `compatible_versions` и `display_name`: загрузчик отвергает первое (ERROR 00010, версии - в versions.sii) и предупреждает о втором (WARN 00002, название берётся со страницы Steam). Версия игры указана в описании, она берётся из файлов игры при сборке.
 2. В загрузчике выбрать **Update** (не New), выбрать уже загруженный мод, указать новую папку `upload`, написать заметку «Обновлено для игры 1.62» и нажать Upload.
 3. ID мода, подписчики и комментарии сохраняются.

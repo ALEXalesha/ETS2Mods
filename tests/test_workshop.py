@@ -167,6 +167,11 @@ class WorkshopTest(unittest.TestCase):
             with zipfile.ZipFile(a) as z:
                 names = z.namelist()
                 self.assertIn("manifest.sii", names)
+                man = z.read("manifest.sii").decode("utf-8")
+                # installed locally, so the Mod Manager fields are back
+                self.assertRegex(man, r'display_name: "OpenRoad: [^"]+"')
+                self.assertIn('compatible_versions[]: "1.61.*"', man)
+                self.assertTrue(man.startswith("SiiNunit") and man.rstrip().endswith("}"))
                 self.assertFalse([n for n in names if n.endswith("/") or "\\" in n])
                 for n in names:
                     for bad in FORBIDDEN:

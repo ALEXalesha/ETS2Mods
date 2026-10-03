@@ -17,6 +17,7 @@ Mods (public names "OpenRoad: ..."):
 
 Fixed during testing:
 - With fuel_price 0, the refuel panel showed "Litres: -nan(ind)": the game divides the cost by the price. The price is now 0.0001 (a full tank still costs 0), and a test rejects any 0 divisor.
+- Workshop packages: manifest.sii without compatible_versions and display_name (the SCS Workshop Uploader rejects compatible_versions with ERROR 00010 and warns about display_name with WARN 00002). The release `.scs` files keep both for the Mod Manager.
 - The zip packages no longer contain directory entries ("[zipfs] error reading a non-directory entry (/def)" in the game log).
 
 Tools:
