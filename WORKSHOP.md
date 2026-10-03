@@ -18,6 +18,7 @@ This gives `workshop\NN_OpenRoad_<Name>\` with:
 - `upload\`: the mod data folder you pick in the uploader. It holds `versions.sii` and `universal\` (manifest.sii without display_name/compatible_versions, mod_icon.jpg 276x162, mod_description.txt EN+RU, def files);
 - `preview.jpg`: the 640x360 Workshop preview image;
 - `steam_page.txt`: the title, type tag and page text to paste.
+- `steam_description.txt`: only the description, ready to copy whole (Ctrl+A, Ctrl+C). Both files use Windows line breaks, otherwise the uploader's text box glues the paragraphs together.
 
 The tests check the uploader's rules (layout, manifest fields, icon size, UTF-8 description, "SiiNunit" headers, no unreferenced files), check for zero values the game divides by, and check that no personal data is included.
 
@@ -38,7 +39,7 @@ Following the SCS modding wiki ("How to upload new mod?"):
 4. Preview image: `workshop\NN_OpenRoad_<Name>\preview.jpg`.
 5. Mod name: the TITLE from `steam_page.txt`.
 6. Visibility: **Private** for the first test.
-7. Description: paste the DESCRIPTION part of `steam_page.txt` (at least 50 characters).
+7. Description: open `steam_description.txt`, copy all of it and paste (at least 50 characters).
 8. Type tag: the TYPE TAG from `steam_page.txt` (Physics, Others or AI Traffic, or the closest one the uploader offers).
 9. Change note: e.g. "1.0 - first release for game 1.61".
 10. Press **Upload**. The uploader validates the folder first and shows an error if something is wrong.
@@ -74,6 +75,7 @@ Suggested upload order: start with a small one as a test (09 More Traffic), then
 - `upload\` - папка данных мода, её выбирать в загрузчике. Внутри `versions.sii` и `universal\` (manifest.sii, иконка 276x162, описание EN+RU, def-файлы);
 - `preview.jpg` - превью для Мастерской 640x360;
 - `steam_page.txt` - название, тег типа и текст для страницы.
+- `steam_description.txt` - только описание, копировать целиком (Ctrl+A, Ctrl+C). Оба файла с переводами строк Windows, иначе поле загрузчика склеивает абзацы.
 
 Тесты проверяют правила загрузчика, отсутствие нулей, на которые игра делит, и отсутствие личных данных.
 
@@ -93,7 +95,7 @@ Steam -> Библиотека -> фильтр над списком игр («И
 4. Превью: `preview.jpg` из той же папки.
 5. Название: TITLE из `steam_page.txt`.
 6. Видимость: для первой проверки **Private** (скрытый).
-7. Описание: вставить часть DESCRIPTION из `steam_page.txt` (не меньше 50 символов).
+7. Описание: открыть `steam_description.txt`, скопировать всё и вставить (не меньше 50 символов).
 8. Тег типа: TYPE TAG из `steam_page.txt` (Physics, Others, AI Traffic или ближайший из предложенных).
 9. Заметка об изменениях: например «1.0 - первая версия для игры 1.61».
 10. Нажать **Upload**. Загрузчик сначала проверит папку и покажет ошибку, если что-то не так.

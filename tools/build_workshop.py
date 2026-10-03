@@ -15,7 +15,8 @@ modding wiki (SCS Workshop Uploader: validation rules):
               mod_description.txt   UTF-8, EN + RU
               def/...          the changed def files
       preview.jpg              640x360 Workshop preview image, < 1 MB
-      steam_page.txt           title, type tag, visibility, page text to paste
+      steam_page.txt           title, type tag, visibility, page text to paste (CRLF)
+      steam_description.txt    only the description, to copy whole (CRLF)
 
 Rules applied from the wiki: the upload root holds only versions.sii and the
 version package; every .sii starts with "SiiNunit" (the BOM of the stock
@@ -117,9 +118,13 @@ VERSIONS_SII = (
 )
 
 
+def steam_bbcode(desc_text):
+    return desc_text.replace("[orange]", "[b]").replace("[normal]", "[/b]")
+
+
 def steam_page(name, desc_text):
     w = ws(name)
-    bb = desc_text.replace("[orange]", "[b]").replace("[normal]", "[/b]")
+    bb = steam_bbcode(desc_text)
     return (
         "TITLE (Mod name):\n%s\n\n"
         "VISIBILITY: Private for the first test, then Friends only or Public\n"
@@ -231,8 +236,12 @@ def build(out_dir, verbose=True):
         with open(os.path.join(uni, "mod_description.txt"), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(desc)
         draw_images(name, spec, os.path.join(uni, "mod_icon.jpg"), os.path.join(base, "preview.jpg"))
-        with open(os.path.join(base, "steam_page.txt"), "w", encoding="utf-8", newline="\n") as fh:
+        # Files for copy-paste into the uploader use CRLF: its description box is a plain
+        # Windows edit field and drops bare LF, gluing the whole text into one paragraph.
+        with open(os.path.join(base, "steam_page.txt"), "w", encoding="utf-8", newline="\r\n") as fh:
             fh.write(steam_page(name, desc))
+        with open(os.path.join(base, "steam_description.txt"), "w", encoding="utf-8", newline="\r\n") as fh:
+            fh.write(steam_bbcode(desc))
         folders.append(base)
         if verbose:
             print(base)
