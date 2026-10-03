@@ -17,7 +17,8 @@ The nine mods are prepared as Workshop folders under the neutral family name "Op
 This gives `workshop\NN_OpenRoad_<Name>\` with:
 - `upload\`: the mod data folder you pick in the uploader. It holds `versions.sii` and `universal\` (manifest.sii without display_name/compatible_versions, mod_icon.jpg 276x162, mod_description.txt EN+RU, def files);
 - `preview.jpg`: the 640x360 Workshop preview image;
-- `steam_page.txt`: the title, type tag and page text to paste.
+- `steam_page.txt`: the title, type tag and page text to paste;
+- `steam_description.txt`: only the page text (Windows line breaks, so the uploader's box keeps the paragraphs) - open it, Ctrl+A, Ctrl+C, paste.
 - `steam_description.txt`: only the description, ready to copy whole (Ctrl+A, Ctrl+C). Both files use Windows line breaks, otherwise the uploader's text box glues the paragraphs together.
 
 The tests check the uploader's rules (layout, manifest fields, icon size, UTF-8 description, "SiiNunit" headers, no unreferenced files), check for zero values the game divides by, and check that no personal data is included.
@@ -74,7 +75,8 @@ Suggested upload order: start with a small one as a test (09 More Traffic), then
 Получится `workshop\NN_OpenRoad_<Имя>\`:
 - `upload\` - папка данных мода, её выбирать в загрузчике. Внутри `versions.sii` и `universal\` (manifest.sii, иконка 276x162, описание EN+RU, def-файлы);
 - `preview.jpg` - превью для Мастерской 640x360;
-- `steam_page.txt` - название, тег типа и текст для страницы.
+- `steam_page.txt` - название, тег типа и текст для страницы;
+- `steam_description.txt` - только текст страницы (с переносами Windows, чтобы окно загрузчика не склеило абзацы): открыть, Ctrl+A, Ctrl+C, вставить.
 - `steam_description.txt` - только описание, копировать целиком (Ctrl+A, Ctrl+C). Оба файла с переводами строк Windows, иначе поле загрузчика склеивает абзацы.
 
 Тесты проверяют правила загрузчика, отсутствие нулей, на которые игра делит, и отсутствие личных данных.
