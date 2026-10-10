@@ -8,7 +8,7 @@
 |---|---|
 | OpenRoad: Hyper Power (`OpenRoad_Hyper_Power.scs`) | Безумный: момент x12, главная пара x0.35 (потолок около 460-590 км/ч), почти нет сопротивления воздуха, сцепление +30%, тормоза x4. Вместо Super Power. |
 | OpenRoad: Super Power (`OpenRoad_Super_Power.scs`) | Момент x3, сопротивление воздуха вдвое меньше, тормоза x2. Управляемо. |
-| OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | Оплата рейсов примерно x10; новый профиль начинает с 10 000 000 €. |
+| OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | Оплата рейсов x10; новый профиль начинает с 10 000 000 €. |
 | OpenRoad: Free Services (`OpenRoad_Free_Services.scs`) | Топливо почти даром (0.0001 €/л), паромы и поезд бесплатно, бесплатные эвакуация, экстренная заправка и восстановление износа. |
 | OpenRoad: No Sleep (`OpenRoad_No_Sleep.scs`) | Водитель не устаёт. |
 | OpenRoad: No Fuel (`OpenRoad_No_Fuel.scs`) | Водитель не устаёт, двигатели тратят 1/10000 топлива. |
@@ -148,17 +148,28 @@ Hyper Power заменяет Super Power: правки No Fuel и No Rollover о
 ### Big Money и прочее
 | Файл | Параметр | Было | Стало |
 |---|---|---|---|
-| economy_data.sii | revenue_per_km_base / fixed_revenue | 15 / 600 | 150 / 6000 |
+| economy_data.sii | revenue_coef_per_km (грузовой рынок) | 0.9 | 9 |
+| economy_data.sii | cargo_market_revenue_coef_per_km (рынок со своим прицепом) | 1.0 | 10 |
+| economy_data.sii | driver_revenue_coef_per_km (быстрые рейсы, наёмные водители) | 0.67 | 6.7 |
+| economy_data.sii | driver_cargo_market_revenue_coef_per_km (наёмные водители) | 0.70 | 7 |
+| economy_data.sii | fixed_revenue | 600 | 6000 |
 | initial_save/normal/game.sii | money_account | 2000 | 10000000 |
 | traffic_data.sii | max_vehicle_count | нет (50) | 300 |
 | config.cfg | g_traffic / g_developer / g_console / g_save_format | 1.0 / 0 / 0 / 0 | 3.0 / 1 / 1 / 2 |
+
+Версии 1.0 и 1.1 меняли вместо этого `revenue_per_km_base` (15 на 150). В 1.61 оплату он не задаёт, поэтому рейсы платили как без мода. По журналу доставок сохранения 1.61 рейс платит примерно так: расстояние x число единиц груза x `unit_reward_per_km` груза x коэффициент оплаты x надбавки за уровень и навыки, плюс `fixed_revenue`. С 1.2.0 мод умножает на 10 эти коэффициенты, а `revenue_per_km_base` оставляет 15. Данные и правило - в `tests/test_pay_law.py`. В сохранении у предложения лежат груз и расстояние, а не цена, поэтому и уже висящие на рынке предложения после загрузки мода должны показать новую цену. С русским интерфейсом и рублями цена за км в списке грузового рынка может налезать на надпись «Предложение заканчивается через ...»: длинная русская строка и длинное число в рублях в строке фиксированной ширины из разметки самой игры (моды интерфейс не меняют). С оплатой x10 число станет на одну цифру длиннее. Если в настройках («Геймплей» - «Валюта») выбрать евро, числа снова короткие.
 
 ## Правка сохранений (игра закрыта)
 
 Команда `cheat` есть внутри exe 1.61, но не подключена (`tools/exe_console_commands.py`). Поэтому деньги, уровень и навыки меняются прямо в сохранении. Оба скрипта читают шифрованные и текстовые сохранения. Перед записью они копируют папку сохранения в `Documents\Euro Truck Simulator 2\save_backups\`, а `--restore` возвращает последнюю копию.
 
+В сохранении деньги лежат в евро. Игра показывает их в валюте из настроек («Геймплей» - «Валюта»; в `config.cfg` профиля это `g_currency`) по курсу из `def/economy_data.sii`. Для рубля курс 93,991: 50 000 000 € в файле - это 4 699 550 000 ₽ на экране. С 1.2.0 `--set` принимает сумму так, как её показывает игра, в валюте профиля, и скрипт всегда пишет оба числа. `--set-eur` пишет евро как есть; `--currency EUR` (или RUB, GBP, ...) задаёт валюту вместо валюты профиля.
+
 ```
-python tools/save_money.py --save autosave --set 50000000 --apply
+python tools/save_money.py                                   # сохранения и деньги (евро и на экране)
+python tools/save_money.py --save autosave --set 10000000000          # пробный прогон: 10 млрд как в игре
+python tools/save_money.py --save autosave --set 10000000000 --apply
+python tools/save_money.py --save autosave --set-eur 50000000 --apply
 python tools/save_profile.py --save autosave                 # опыт, уровень, навыки
 python tools/save_profile.py --save autosave --max           # пробный прогон
 python tools/save_profile.py --save autosave --max --apply

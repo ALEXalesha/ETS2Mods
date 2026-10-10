@@ -8,7 +8,7 @@ Ten single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the 
 |---|---|
 | OpenRoad: Hyper Power (`OpenRoad_Hyper_Power.scs`) | Extreme: torque x12, final drive x0.35 (about 460-590 km/h gear-limited), almost no air drag, grip +30%, brakes x4. Use instead of Super Power. |
 | OpenRoad: Super Power (`OpenRoad_Super_Power.scs`) | Torque x3, half the air drag, brakes x2. Still drivable. |
-| OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | About 10x job pay; a new profile starts with 10,000,000 EUR. |
+| OpenRoad: Big Money (`OpenRoad_Big_Money.scs`) | Job pay 10x; a new profile starts with 10,000,000 EUR. |
 | OpenRoad: Free Services (`OpenRoad_Free_Services.scs`) | Fuel almost free (0.0001 EUR/l), ferries and the Channel train free, free towing, emergency refuel/recharge and wear restore. |
 | OpenRoad: No Sleep (`OpenRoad_No_Sleep.scs`) | The driver never gets tired. |
 | OpenRoad: No Fuel (`OpenRoad_No_Fuel.scs`) | Engines use 1/10000 of the fuel. |
@@ -156,9 +156,14 @@ The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_s
 
 | File | Parameter | Stock | Mod |
 |---|---|---|---|
-| def/economy_data.sii | revenue_per_km_base | 15 | 150 |
+| def/economy_data.sii | revenue_coef_per_km (freight market) | 0.9 | 9 |
+| def/economy_data.sii | cargo_market_revenue_coef_per_km (cargo market) | 1.0 | 10 |
+| def/economy_data.sii | driver_revenue_coef_per_km (quick jobs, hired drivers) | 0.67 | 6.7 |
+| def/economy_data.sii | driver_cargo_market_revenue_coef_per_km (hired drivers, cargo market) | 0.70 | 7 |
 | def/economy_data.sii | fixed_revenue | 600 | 6000 |
 | def/initial_save/normal/game.sii | money_account | 2000 | 10000000 |
+
+Versions 1.0 and 1.1 changed `revenue_per_km_base` (15 to 150) instead. In 1.61 that value does not set the pay, so jobs paid the same as without the mod. The delivery log of a 1.61 save shows that a job pays about distance x units x the cargo's `unit_reward_per_km` x the revenue coefficient x the level and skill bonuses, plus `fixed_revenue`. Since 1.2.0 the mod multiplies those coefficients by 10 and leaves `revenue_per_km_base` at 15. The field data and the rule are in `tests/test_pay_law.py`. The save keeps an offer's cargo and distance, not its price, so offers already on the market should show the new price once the mod is loaded. With the Russian interface and roubles, the price per km in the freight market list can run into the "offer expires in ..." text: a long Russian label next to a long rouble number in a fixed-width row of the game's own layout (the mods do not change the interface). With 10x pay the number gets one digit longer. Choosing EUR in Options, Gameplay, Currency makes the numbers short again.
 
 ### More Traffic and config.cfg (author's setup)
 
@@ -177,9 +182,13 @@ The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_s
 
 The console command `cheat` is compiled into 1.61 but never registered (`tools/exe_console_commands.py`), so money, level and skills are changed in the save. Both tools read encrypted binary saves (ScsC + BSII) and text saves. Before writing they copy the save folder to `Documents\Euro Truck Simulator 2\save_backups\`, and `--restore` puts the latest backup back.
 
+The save keeps money in EUR. The game shows it in the currency chosen in Options, Gameplay (the profile's `config.cfg`, `g_currency`), converted with the rate in `def/economy_data.sii`. For roubles the rate is 93.991, so 50,000,000 EUR in the file shows as 4,699,550,000 RUB. Since 1.2.0 `--set` takes the amount as the game shows it, in the profile's currency, and every readout shows both numbers. `--set-eur` writes EUR as is; `--currency EUR` (or RUB, GBP, ...) overrides the profile's currency.
+
 ```
-python tools/save_money.py                                        # list saves and money
-python tools/save_money.py --save autosave --set 50000000 --apply
+python tools/save_money.py                                        # list saves and money (EUR and on screen)
+python tools/save_money.py --save autosave --set 10000000000      # dry run: 10 billion as the game shows it
+python tools/save_money.py --save autosave --set 10000000000 --apply
+python tools/save_money.py --save autosave --set-eur 50000000 --apply
 python tools/save_profile.py --save autosave                      # XP, level, skills
 python tools/save_profile.py --save autosave --max                # dry run
 python tools/save_profile.py --save autosave --max --apply

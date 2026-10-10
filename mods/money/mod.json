@@ -3,7 +3,7 @@
   "file": "alexey_money.scs",
   "display_name": "Big Money (Alexey)",
   "category": "other",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "icon": {
     "title": "BIG MONEY",
     "subtitle": "ДЕНЬГИ x10",
@@ -21,8 +21,20 @@
   "patches": {
     "def/economy_data.sii": [
       {
-        "key": "revenue_per_km_base",
-        "value": "150"
+        "key": "revenue_coef_per_km",
+        "value": "9"
+      },
+      {
+        "key": "cargo_market_revenue_coef_per_km",
+        "value": "10"
+      },
+      {
+        "key": "driver_revenue_coef_per_km",
+        "value": "6.7"
+      },
+      {
+        "key": "driver_cargo_market_revenue_coef_per_km",
+        "value": "7"
       },
       {
         "key": "fixed_revenue",

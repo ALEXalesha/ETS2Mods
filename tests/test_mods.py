@@ -230,7 +230,14 @@ class BuiltModsTest(unittest.TestCase):
     def test_values_that_matter(self):
         res = built()
         econ = res["money"]["files"]["def/economy_data.sii"].decode("utf-8")
-        self.assertEqual(values(econ, "revenue_per_km_base"), ["150"])
+        # x10 pay: the coefficients the job price uses (tests/test_pay_law.py); revenue_per_km_base
+        # is not a pay factor in 1.61 and stays vanilla
+        self.assertEqual(values(econ, "revenue_per_km_base"), ["15"])
+        self.assertEqual(values(econ, "revenue_coef_per_km"), ["9"])
+        self.assertEqual(values(econ, "cargo_market_revenue_coef_per_km"), ["10"])
+        self.assertEqual(values(econ, "driver_revenue_coef_per_km"), ["6.7"])
+        self.assertEqual(values(econ, "driver_cargo_market_revenue_coef_per_km"), ["7"])
+        self.assertEqual(values(econ, "fixed_revenue"), ["6000"])
         self.assertEqual(values(econ, "maximum_driving_time"), ["10000000"])
         self.assertEqual(values(econ, "tow_price_base"), ["0"])
         dmg = res["no_damage"]["files"]["def/damage_data.sii"].decode("utf-8")

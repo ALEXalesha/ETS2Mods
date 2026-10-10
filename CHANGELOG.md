@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 - 2026-10-10
+
+- **Big Money** pays 10x for real. 1.0-1.1 changed `revenue_per_km_base` (15 to 150), which the 1.61 job price does not use, so pay stayed at the vanilla level (field report: freight market about 3,900 RUB/km = 41.5 EUR/km). Now `revenue_coef_per_km` 0.9 to 9, `cargo_market_revenue_coef_per_km` 1.0 to 10, `driver_revenue_coef_per_km` 0.67 to 6.7, `driver_cargo_market_revenue_coef_per_km` 0.70 to 7, `fixed_revenue` 600 to 6000; `revenue_per_km_base` stays 15. Rule and field data (delivery log of a 1.61 save, screenshot offers): `tests/test_pay_law.py`.
+- **save_money.py**: the save keeps EUR, the game shows the profile's currency (`g_currency` in the profile's config.cfg, rate from `def/economy_data.sii`). `--set` takes the amount as the game shows it, `--set-eur` writes EUR, `--currency` overrides, every readout shows both; `--profile-dir` and `--backup-dir` for other folders; the written value is read back. Tests: `tests/test_save_money.py`.
+- All mods 1.2.0.
+
 ## 1.1.0 - 2026-10-03
 
 - "No Sleep & No Fuel" is now two separate mods: **OpenRoad: No Sleep** (maximum_driving_time 10,000,000 min) and **OpenRoad: No Fuel** (consumption_coef 0.0001 on all 203 engines). There are 10 mods in total.
