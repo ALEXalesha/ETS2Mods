@@ -1,8 +1,8 @@
 """Show or change the money in an ETS2 save (game.sii) - the game must be closed.
 
   python tools/save_money.py                      list profiles, saves and money
-  python tools/save_money.py --save autosave --set 5000000000          dry run
-  python tools/save_money.py --save autosave --set 5000000000 --apply  write
+  python tools/save_money.py --save latest --set 5000000000            dry run (writes NOTHING)
+  python tools/save_money.py --save latest --set 5000000000 --apply    write
   python tools/save_money.py --save autosave --set-eur 50000000 --apply
   python tools/save_money.py --save autosave --restore                 put the last backup back
 
@@ -15,6 +15,18 @@ currency_ratio). With roubles (rate 93.991) --set 5000000000 writes
 --set-eur writes an EUR amount as is. --currency CODE (EUR, RUB, ...) overrides
 the profile's currency. Every readout shows both: EUR in the file and the
 amount on screen.
+
+--save latest picks the newest save of the profile (the one the game's
+"Continue" loads). Without --apply nothing is written.
+
+The simplest way on Windows: double-click money.bat (or "Деньги ETS2.bat") in
+the repository root - it asks for the amount and writes it (tools/money_menu.py).
+
+Steam Cloud: a profile under Steam\\userdata\\<id>\\227300\\remote is synced by
+Steam. At the next game launch Steam compares the file with its cache (SHA),
+sees the local change and uploads it ("SHA mismatch with cache - setting local
+changes" in Steam\\logs\\cloud_log.txt). Only if the cloud copy changed too
+(another PC) does Steam show a conflict window: then pick the local files.
 
 Before writing, the whole save folder is copied to
   Documents\\Euro Truck Simulator 2\\save_backups\\<profile>\\<save>_<time>\\
@@ -148,6 +160,23 @@ def game_running():
         return False
 
 
+def in_steam_cloud(profile_dir):
+    """True for a profile Steam syncs (Steam\\userdata\\<id>\\227300\\remote\\profiles\\...)."""
+    parts = [x.lower() for x in os.path.normpath(os.path.abspath(profile_dir)).split(os.sep)]
+    return "userdata" in parts and "remote" in parts and "227300" in parts
+
+
+def saves_newest_first(profile_dir):
+    """Save folders that hold a game.sii, newest first (the game's "Continue" loads the first)."""
+    games = glob.glob(os.path.join(profile_dir, "save", "*", "game.sii"))
+    return [os.path.dirname(g) for g in sorted(games, key=os.path.getmtime, reverse=True)]
+
+
+def latest_save(profile_dir):
+    saves = saves_newest_first(profile_dir)
+    return os.path.basename(saves[0]) if saves else None
+
+
 TEXT_BANK = re.compile(r"(^bank\s*:\s*[^\s{]+\s*\{.*?^\s*money_account\s*:\s*)(-?\d+)", re.M | re.S)
 
 
@@ -177,11 +206,56 @@ def backup(save_dir, prof, root=BACKUP_ROOT):
     return dst
 
 
+def patched(raw, kind, where, eur):
+    """The save bytes with money_account = eur, checked by reading them back."""
+    if not 0 <= eur <= INT64_MAX:
+        raise SiiError("money must be between 0 and %s EUR" % format(INT64_MAX, ","))
+    if kind == "binary":
+        new = bytearray(raw)
+        struct.pack_into("<q", new, where, eur)
+        new = bytes(new)
+    else:
+        text = raw.decode("utf-8")
+        new = (text[:where.start(2)] + str(eur) + text[where.end(2):]).encode("utf-8")
+    if new[:4] == b"BSII":
+        b = Bsii(new)
+        t, off = b.find("bank")[0][2]["money_account"]
+        got = struct.unpack_from("<q", new, off)[0]
+    else:
+        got = int(TEXT_BANK.search(new.decode("utf-8")).group(2))
+    if got != eur:
+        raise SiiError("internal check: patched save reads %s, expected %s" % (got, eur))
+    return new
+
+
+def write_money(profile_dir, save, eur, backup_dir=BACKUP_ROOT):
+    """Back up the save folder, write eur into its game.sii, read it back.
+
+    Returns (money before, money after, backup folder). The caller checks that the
+    game is closed. The file gets a fresh modified time; Steam Cloud compares the
+    SHA with its cache anyway and uploads the changed file at the next launch.
+    """
+    save_dir = os.path.join(profile_dir, "save", save)
+    game = os.path.join(save_dir, "game.sii")
+    kind, raw, before, where = read_money(game)
+    new = patched(raw, kind, where, eur)
+    dst = backup(save_dir, profile_dir, backup_dir)
+    with open(game, "wb") as fh:
+        fh.write(new)
+    _k, _r, after, _w = read_money(game)
+    if after != eur:
+        raise SiiError("read back %s, expected %s - put the backup back with --restore (%s)" % (after, eur, dst))
+    return before, after, dst
+
+
+BAR = "=" * 72
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--profile", help="profile folder name (hex) or display name; default: the only/first one")
     ap.add_argument("--profile-dir", help="path of one profile folder (the one with save inside)")
-    ap.add_argument("--save", help="save folder name, e.g. autosave, 1, quicksave")
+    ap.add_argument("--save", help="save folder name (autosave, 1, quicksave, ...) or latest")
     ap.add_argument("--set", type=int, help="new money AS THE GAME SHOWS IT, in the profile's currency")
     ap.add_argument("--set-eur", type=int, help="new money in EUR, as stored in the save")
     ap.add_argument("--currency", help="currency code (EUR, RUB, ...) instead of the profile's")
@@ -215,6 +289,11 @@ def main():
         return 0
 
     prof = profs[0]
+    if a.save == "latest":
+        a.save = latest_save(prof)
+        if not a.save:
+            raise SystemExit("no save with game.sii in " + prof)
+        print("latest save: %s" % a.save)
     save_dir = os.path.join(prof, "save", a.save)
     game = os.path.join(save_dir, "game.sii")
     if not os.path.isfile(game) and not a.restore:
@@ -248,39 +327,41 @@ def main():
             print("  the save holds whole euros, so the game will show %s" % fmt(to_screen(eur, cur), cur["code"]))
     if not 0 <= eur <= INT64_MAX:
         raise SystemExit("money must be between 0 and %s EUR" % format(INT64_MAX, ","))
-    if kind == "binary":
-        new = bytearray(raw)
-        struct.pack_into("<q", new, where, eur)
-        new = bytes(new)
-    else:
-        text = raw.decode("utf-8")
-        new = (text[:where.start(2)] + str(eur) + text[where.end(2):]).encode("utf-8")
-    # check the result reads back with the new value
-    if new[:4] == b"BSII":
-        b = Bsii(new)
-        t, off = b.find("bank")[0][2]["money_account"]
-        assert struct.unpack_from("<q", new, off)[0] == eur
-    else:
-        assert int(TEXT_BANK.search(new.decode("utf-8")).group(2)) == eur
+    patched(raw, kind, where, eur)          # checks the change before anything is touched
     if not a.apply:
-        print("dry run: would write %s (add --apply to write)" % both(eur, cur))
+        print(BAR)
+        print("  NOTHING WRITTEN (dry run). To write, add --apply:")
+        print("  would write: %s" % both(eur, cur))
+        print("  НИЧЕГО НЕ ЗАПИСАНО - добавьте --apply")
+        print(BAR)
         return 0
     if game_running():
         raise SystemExit("ETS2 is running - close the game first, otherwise it overwrites the save")
-    dst = backup(save_dir, prof, a.backup_dir)
+    before, after, dst = write_money(prof, a.save, eur, a.backup_dir)
     print("backup:", dst)
-    with open(game, "wb") as fh:
-        fh.write(new)
-    _k, _r, check, _w = read_money(game)
-    if check != eur:
-        raise SystemExit("read back %s, expected %s - put the backup back with --restore" % (check, eur))
-    print("written and read back: %s" % both(check, cur))
-    print("was:                   %s" % both(money, cur))
+    print(BAR)
+    print("  WRITTEN: %s" % both(after, cur))
+    print("  was:     %s" % both(before, cur))
+    if a.save == latest_save(prof):
+        print("  Now start the game and load the latest save (%s)." % a.save)
+        print("  ЗАПИСАНО. Теперь запустите игру и загрузите последнее сохранение.")
+    else:
+        print("  Now start the game and load the save %s (Load game)." % a.save)
+        print("  ЗАПИСАНО. Теперь запустите игру и загрузите сохранение %s." % a.save)
+    print(BAR)
     print("file:", game)
+    if in_steam_cloud(prof):
+        print("Steam Cloud profile: Steam uploads the changed file at the next game launch. If it shows a")
+        print("cloud conflict window, choose the files on THIS computer (local), not the cloud.")
     return 0
 
 
 if __name__ == "__main__":
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")    # a console code page without a sign must not crash
+        except (AttributeError, ValueError):
+            pass
     try:
         sys.exit(main())
     except SiiError as e:

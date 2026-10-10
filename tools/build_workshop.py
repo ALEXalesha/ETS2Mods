@@ -17,6 +17,8 @@ modding wiki (SCS Workshop Uploader: validation rules):
       preview.jpg              640x360 Workshop preview image, < 1 MB
       steam_page.txt           title, type tag, visibility, page text to paste (CRLF)
       steam_description.txt    only the description, to copy whole (CRLF)
+      steam_changelog.txt      the change note for an Update of an existing item, EN then
+                               RU (CRLF); only when workshop.json has one for this version
 
 Rules applied from the wiki: the upload root holds only versions.sii and the
 version package; every .sii starts with "SiiNunit" (the BOM of the stock
@@ -120,6 +122,15 @@ VERSIONS_SII = (
 
 def steam_bbcode(desc_text):
     return desc_text.replace("[orange]", "[b]").replace("[normal]", "[/b]")
+
+
+def steam_changelog(name, version):
+    """The change note for the uploader's Update, or None: workshop.json "changelog"
+    keyed by version, so a note never outlives its version."""
+    note = ws(name).get("changelog", {}).get(version)
+    if not note:
+        return None
+    return "\n".join(note["en"]) + "\n\n-----\n\n" + "\n".join(note["ru"]) + "\n"
 
 
 def steam_page(name, desc_text):
@@ -242,6 +253,10 @@ def build(out_dir, verbose=True):
             fh.write(steam_page(name, desc))
         with open(os.path.join(base, "steam_description.txt"), "w", encoding="utf-8", newline="\r\n") as fh:
             fh.write(steam_bbcode(desc))
+        note = steam_changelog(name, spec["version"])
+        if note:
+            with open(os.path.join(base, "steam_changelog.txt"), "w", encoding="utf-8", newline="\r\n") as fh:
+                fh.write(note)
         folders.append(base)
         if verbose:
             print(base)

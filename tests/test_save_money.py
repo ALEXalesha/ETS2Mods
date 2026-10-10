@@ -103,7 +103,8 @@ class CommandLineTest(unittest.TestCase):
     def run_tool(self, *args):
         cmd = [sys.executable, os.path.join(ROOT, "tools", "save_money.py"),
                "--profile-dir", self.prof, "--backup-dir", self.backups] + list(args)
-        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8")
+        env = dict(os.environ, PYTHONIOENCODING="utf-8")
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", env=env)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         return r.stdout
 
@@ -122,6 +123,10 @@ class CommandLineTest(unittest.TestCase):
         self.assertIn("1,000,000,000 RUB", out)
         self.assertIn("10,639,317 EUR", out)
         self.assertTrue(os.listdir(os.path.join(self.backups, "414C6578")))
+        # impossible to miss (report 10.10: a dry run was taken for a write)
+        self.assertIn("WRITTEN: 10,639,317 EUR in the file = 1,000,000,044 RUB on screen", out)
+        self.assertIn("Now start the game and load the latest save", out)
+        self.assertNotIn("NOTHING WRITTEN", out)
 
     def test_set_eur(self):
         self.run_tool("--save", "autosave", "--set-eur", "70000000", "--apply")
@@ -130,7 +135,22 @@ class CommandLineTest(unittest.TestCase):
     def test_dry_run_writes_nothing(self):
         out = self.run_tool("--save", "autosave", "--set", "1000000000")
         self.assertEqual(self.money_in_file(), 50000000)
-        self.assertIn("dry run", out)
+        self.assertIn("NOTHING WRITTEN", out)
+        self.assertIn("add --apply", out)
+        self.assertNotIn("WRITTEN:", out)
+        self.assertFalse(os.path.exists(self.backups))
+
+    def test_save_latest(self):
+        older = os.path.join(self.prof, "save", "1")
+        os.makedirs(older)
+        with open(os.path.join(older, "game.sii"), "w", encoding="utf-8") as fh:
+            fh.write(TEXT)
+        os.utime(os.path.join(older, "game.sii"), (1600000000, 1600000000))
+        out = self.run_tool("--save", "latest", "--set-eur", "777", "--apply")
+        self.assertIn("latest save: autosave", out)
+        self.assertEqual(self.money_in_file(), 777)
+        kind, _raw, money, _w = save_money.read_money(os.path.join(older, "game.sii"))
+        self.assertEqual(money, 50000000)
 
     def test_currency_override(self):
         out = self.run_tool("--save", "autosave", "--currency", "EUR", "--set", "123456", "--apply")

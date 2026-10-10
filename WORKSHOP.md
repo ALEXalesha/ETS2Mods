@@ -18,8 +18,8 @@ This gives `workshop\NN_OpenRoad_<Name>\` with:
 - `upload\`: the mod data folder you pick in the uploader. It holds `versions.sii` and `universal\` (manifest.sii without display_name/compatible_versions, mod_icon.jpg 276x162, mod_description.txt EN+RU, def files);
 - `preview.jpg`: the 640x360 Workshop preview image;
 - `steam_page.txt`: the title, type tag and page text to paste;
-- `steam_description.txt`: only the page text (Windows line breaks, so the uploader's box keeps the paragraphs) - open it, Ctrl+A, Ctrl+C, paste.
-- `steam_description.txt`: only the description, ready to copy whole (Ctrl+A, Ctrl+C). Both files use Windows line breaks, otherwise the uploader's text box glues the paragraphs together.
+- `steam_description.txt`: only the description, ready to copy whole (Ctrl+A, Ctrl+C). Both files use Windows line breaks, otherwise the uploader's text box glues the paragraphs together;
+- `steam_changelog.txt` (only when the mod has a change note for its version): the change note for an Update, see step 6.
 
 The tests check the uploader's rules (layout, manifest fields, icon size, UTF-8 description, "SiiNunit" headers, no unreferenced files), check for zero values the game divides by, and check that no personal data is included.
 
@@ -60,6 +60,16 @@ Suggested upload order: start with a small one as a test (10 More Traffic), then
 2. In the uploader choose **Update** (not New), pick the existing item, choose the new `upload` folder, write a change note such as "Updated for game 1.62", then press Upload.
 3. The Workshop item keeps its ID, subscribers and comments.
 
+### 6. Update an existing item (example: Big Money 1.2.0)
+
+1. Rebuild (step 0). The mod's folder then also has `steam_changelog.txt`: the change note, English then Russian.
+2. Start the Workshop Uploader from the Steam library (Tools), choose Euro Truck Simulator 2.
+3. Choose **Update** (not New) and pick the existing item, "OpenRoad: Big Money".
+4. Mod data folder: `workshop\03_OpenRoad_Big_Money\upload` again. Preview image: `preview.jpg` from the same folder.
+5. Description: paste `steam_description.txt` again if the text changed (for 1.2.0 it did).
+6. Change note: open `steam_changelog.txt`, Ctrl+A, Ctrl+C, paste.
+7. Leave the visibility as it is and press **Upload**. Subscribers get the new version automatically the next time Steam updates the game's Workshop items.
+
 ## Русский
 
 Десять модов подготовлены как папки для Мастерской под нейтральным названием серии «OpenRoad». Сам я ничего не выкладывал; загружать их нужно самому через официальный загрузчик SCS.
@@ -76,8 +86,8 @@ Suggested upload order: start with a small one as a test (10 More Traffic), then
 - `upload\` - папка данных мода, её выбирать в загрузчике. Внутри `versions.sii` и `universal\` (manifest.sii, иконка 276x162, описание EN+RU, def-файлы);
 - `preview.jpg` - превью для Мастерской 640x360;
 - `steam_page.txt` - название, тег типа и текст для страницы;
-- `steam_description.txt` - только текст страницы (с переносами Windows, чтобы окно загрузчика не склеило абзацы): открыть, Ctrl+A, Ctrl+C, вставить.
-- `steam_description.txt` - только описание, копировать целиком (Ctrl+A, Ctrl+C). Оба файла с переводами строк Windows, иначе поле загрузчика склеивает абзацы.
+- `steam_description.txt` - только описание, копировать целиком (Ctrl+A, Ctrl+C). Оба файла с переводами строк Windows, иначе поле загрузчика склеивает абзацы;
+- `steam_changelog.txt` (только если у мода есть заметка для его версии) - заметка об изменениях для обновления, см. шаг 6.
 
 Тесты проверяют правила загрузчика, отсутствие нулей, на которые игра делит, и отсутствие личных данных.
 
@@ -116,3 +126,13 @@ Steam -> Библиотека -> фильтр над списком игр («И
 1. Пересобрать (шаг 0). Если SCS переименует параметр, сборка остановится с ошибкой. В manifest.sii пакетов Мастерской нет `compatible_versions` и `display_name`: загрузчик отвергает первое (ERROR 00010, версии - в versions.sii) и предупреждает о втором (WARN 00002, название берётся со страницы Steam). Версия игры указана в описании, она берётся из файлов игры при сборке.
 2. В загрузчике выбрать **Update** (не New), выбрать уже загруженный мод, указать новую папку `upload`, написать заметку «Обновлено для игры 1.62» и нажать Upload.
 3. ID мода, подписчики и комментарии сохраняются.
+
+### 6. Обновить уже загруженный мод (пример: Big Money 1.2.0)
+
+1. Пересобрать (шаг 0). В папке мода появится ещё `steam_changelog.txt` - заметка об изменениях, сначала по-английски, потом по-русски.
+2. Запустить загрузчик Мастерской из библиотеки Steam («Инструменты»), выбрать Euro Truck Simulator 2.
+3. Нажать **Update** (не New) и выбрать уже загруженный мод «OpenRoad: Big Money».
+4. Папка данных мода: снова `workshop\03_OpenRoad_Big_Money\upload`. Превью: `preview.jpg` из той же папки.
+5. Описание: вставить `steam_description.txt` заново, если текст поменялся (в 1.2.0 поменялся).
+6. Заметка об изменениях (Change note): открыть `steam_changelog.txt`, Ctrl+A, Ctrl+C, вставить.
+7. Видимость не трогать, нажать **Upload**. Подписчики получат новую версию сами, когда Steam в следующий раз обновит моды игры.

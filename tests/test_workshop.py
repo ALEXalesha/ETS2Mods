@@ -7,6 +7,7 @@ next to each other; icon JPG exactly 276x162, < 1 MB; description UTF-8 .txt,
 Preview image 640x360 (SCS forum), Steam limit 1 MB.
 """
 
+import json
 import os
 import re
 import sys
@@ -106,8 +107,8 @@ class WorkshopTest(unittest.TestCase):
 
     def test_layout(self):
         for base in folders():
-            self.assertEqual(sorted(os.listdir(base)),
-                             ["preview.jpg", "steam_description.txt", "steam_page.txt", "upload"])
+            names = sorted(x for x in os.listdir(base) if x != "steam_changelog.txt")
+            self.assertEqual(names, ["preview.jpg", "steam_description.txt", "steam_page.txt", "upload"])
             self.assertEqual(sorted(os.listdir(os.path.join(base, "upload"))), ["universal", "versions.sii"])
             v = rb(os.path.join(base, "upload", "versions.sii"))
             self.assertTrue(v.startswith(b"SiiNunit"))
@@ -153,6 +154,25 @@ class WorkshopTest(unittest.TestCase):
             self.assertIn("\r\n\r\n", only)
             self.assertIn("-----", only)
             self.assertIn(only, rt(os.path.join(base, "steam_page.txt")))
+
+    def test_changelog_for_update(self):
+        """Big Money 1.2.0 is an Update of an existing Workshop item: a change note EN then RU,
+        CRLF like the other paste files, naming the coefficients that changed. Only the mods
+        with a note for their current version get the file."""
+        with_note = [b for b in folders() if os.path.exists(os.path.join(b, "steam_changelog.txt"))]
+        self.assertEqual([os.path.basename(b) for b in with_note], ["03_OpenRoad_Big_Money"])
+        data = rb(os.path.join(with_note[0], "steam_changelog.txt"))
+        self.assertEqual(data.count(b"\n"), data.count(b"\r\n"))
+        text = data.decode("utf-8")
+        with open(os.path.join(ROOT, "mods", "money", "mod.json"), encoding="utf-8") as fh:
+            version = json.load(fh)["version"]
+        self.assertTrue(text.startswith(version + " - "), text[:40])
+        en, ru = text.split("-----")
+        self.assertRegex(ru, "[а-яА-Я]")
+        self.assertNotRegex(en, "[а-яА-Я]")
+        for part in (en, ru):
+            self.assertIn("revenue_coef_per_km 0.9 -> 9", part)
+        self.assertLess(len(text), 8000)
 
     def test_files_valid_for_uploader(self):
         for base in folders():

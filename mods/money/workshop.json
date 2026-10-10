@@ -15,5 +15,19 @@
     "- НОВЫЙ профиль начинает с 10 000 000 € вместо 2000 € (у старых профилей деньги не меняются).",
     "- Внутри также экономические правки OpenRoad: Free Services, No Sleep и No Fines (бесплатная эвакуация, нет штрафа за отказ, повреждение груза не уменьшает оплату, нет усталости).",
     "- Оплата не выросла? Версии 1.0-1.1 меняли revenue_per_km_base, а 1.61 по нему оплату не считает; обновитесь до 1.2.0. Ещё Big Money должен стоять в Менеджере модов ВЫШЕ всех модов, меняющих def/economy_data.sii: наших (Free Services, No Sleep, No Fines) и чужих модов экономики, усталости или штрафов - игра берёт самую верхнюю копию этого файла."
-  ]
+  ],
+  "changelog": {
+    "1.2.0": {
+      "en": [
+        "1.2.0 - job pay is really 10x now.",
+        "Versions 1.0-1.1 changed revenue_per_km_base, which game 1.61 does not use for job pay, so jobs paid the normal rate. 1.2.0 multiplies the coefficients the game does use: revenue_coef_per_km 0.9 -> 9 (freight market), cargo_market_revenue_coef_per_km 1.0 -> 10, driver_revenue_coef_per_km 0.67 -> 6.7 (quick jobs, hired drivers), driver_cargo_market_revenue_coef_per_km 0.70 -> 7; fixed_revenue 600 -> 6000 as before.",
+        "Offers already on the market show the new price too. Keep Big Money above other mods that change def/economy_data.sii."
+      ],
+      "ru": [
+        "1.2.0 - оплата рейсов теперь действительно x10.",
+        "Версии 1.0-1.1 меняли revenue_per_km_base, а игра 1.61 по нему оплату рейсов не считает, поэтому рейсы платили как обычно. В 1.2.0 умножены коэффициенты, которые игра использует: revenue_coef_per_km 0.9 -> 9 (грузовой рынок), cargo_market_revenue_coef_per_km 1.0 -> 10, driver_revenue_coef_per_km 0.67 -> 6.7 (быстрые рейсы, наёмные водители), driver_cargo_market_revenue_coef_per_km 0.70 -> 7; fixed_revenue 600 -> 6000, как и раньше.",
+        "Уже висящие на рынке предложения тоже показывают новую цену. Big Money должен стоять выше других модов, меняющих def/economy_data.sii."
+      ]
+    }
+  }
 }

@@ -22,6 +22,27 @@ Ten single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the 
 - **Steam Workshop:** subscribe to the OpenRoad items, then turn them on in the in-game Mod Manager.
 - **From the releases:** download the `.scs` files from the [latest release](../../releases/latest) and put them into `Documents\Euro Truck Simulator 2\mod`. Then turn them on in the Mod Manager (profile -> Mod Manager), in the order below.
 
+## Change money
+
+The game keeps money in the save; there is no working console command for it in 1.61. To set it:
+
+1. Close the game completely.
+2. Double-click **`money.bat`** (or **`Деньги ETS2.bat`**, the same thing) in the repository folder.
+3. It lists your profiles with the money **as the game shows it** (in roubles if the game shows roubles), asks for the new amount in the same currency (`10000000000`, `10 000 000 000` or `10 млрд`), asks to close the game if it is still running, backs up the save and writes it.
+4. When it says **ЗАПИСАНО** (written), start the game and load the latest save ("Continue").
+
+It needs Python 3 from python.org and, for the game's encrypted saves, one package: `py -m pip install pycryptodome` (or `-r tools\requirements.txt`). It uses the project's `.venv` if there is one.
+
+The same in one command (10,000,000,000 in the game's currency, written into the newest save):
+
+```
+python tools/save_money.py --save latest --set 10000000000 --apply
+```
+
+Without `--apply` nothing is written: the tool then prints a big "NOTHING WRITTEN".
+
+**Steam Cloud.** A profile with Steam Cloud on lives in `Steam\userdata\<id>\227300\remote\profiles`. At the next game launch Steam compares the save with its own list (SHA), sees that it changed on this computer and uploads it (`Steam\logs\cloud_log.txt`: "SHA mismatch with cache - setting local changes", then "Need to upload file"). Nothing to do. Only if the cloud copy changed as well (the game was played on another computer since) does Steam show a conflict window: then choose the files on this computer, not the cloud ones, or the old amount comes back.
+
 ## Load order
 
 The game's own Mod Manager hint: "Mods are prioritized from top to bottom in the Active Mods window - the first mod listed ... has the highest priority."
@@ -186,8 +207,8 @@ The save keeps money in EUR. The game shows it in the currency chosen in Options
 
 ```
 python tools/save_money.py                                        # list saves and money (EUR and on screen)
-python tools/save_money.py --save autosave --set 10000000000      # dry run: 10 billion as the game shows it
-python tools/save_money.py --save autosave --set 10000000000 --apply
+python tools/save_money.py --save latest --set 10000000000        # dry run: 10 billion as the game shows it
+python tools/save_money.py --save latest --set 10000000000 --apply
 python tools/save_money.py --save autosave --set-eur 50000000 --apply
 python tools/save_profile.py --save autosave                      # XP, level, skills
 python tools/save_profile.py --save autosave --max                # dry run
@@ -222,7 +243,7 @@ To change a value, edit `mods/<name>/mod.json` (operations are described at the 
 
 - `tools/hashfs.py`: HashFS v1/v2 reader. Paths are hashed with CityHash64 1.0.x (`tools/cityhash103.py`); the PyPI `cityhash` package is 1.1 and gives different hashes.
 - `tools/sii_save.py`: ScsC decryption and a BSII reader.
-- `tools/save_money.py`, `tools/save_profile.py`: save editors.
+- `tools/save_money.py`, `tools/save_profile.py`: save editors; `tools/money_menu.py` is the question-and-answer money changer behind `money.bat`.
 - `tools/exe_console_commands.py`: console command registration check.
 - `tools/build_mods.py`, `tools/make_icons.py`: build.
 
