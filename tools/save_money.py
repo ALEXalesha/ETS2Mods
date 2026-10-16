@@ -199,11 +199,64 @@ def read_money(path):
     return "text", raw, int(ms[0].group(2)), ms[0]
 
 
+INFO_MONEY = re.compile(r"(^\s*info_money_account\s*:\s*)(-?\d+)", re.M)
+
+
+def info_patched(path, eur):
+    """info.sii bytes with info_money_account = eur, or None when the file has no such
+    field or cannot be read (the money in game.sii is what counts; info.sii is only the
+    Load screen). Written as plain text / BSII, like game.sii."""
+    try:
+        with open(path, "rb") as fh:
+            raw = load_plain(fh.read())
+        if raw[:4] == b"BSII":
+            units = Bsii(raw).find("save_container")
+            if len(units) != 1 or "info_money_account" not in units[0][2]:
+                return None
+            t, off = units[0][2]["info_money_account"]
+            fmt_ = {0x31: "<q", 0x33: "<Q", 0x25: "<i", 0x27: "<I"}.get(t)
+            if fmt_ is None:
+                return None
+            new = bytearray(raw)
+            struct.pack_into(fmt_, new, off, eur)
+            new = bytes(new)
+            _t, off2 = Bsii(new).find("save_container")[0][2]["info_money_account"]
+            return new if struct.unpack_from(fmt_, new, off2)[0] == eur else None
+        text = raw.decode("utf-8")
+        ms = list(INFO_MONEY.finditer(text))
+        if len(ms) != 1:
+            return None
+        return (text[:ms[0].start(2)] + str(eur) + text[ms[0].end(2):]).encode("utf-8")
+    except (SiiError, OSError, UnicodeDecodeError, struct.error):
+        return None
+
+
+BACKUP_NAME = r"_(\d{8}-\d{6})(?:_(\d+))?"     # <save>_<YYYYmmdd-HHMMSS>[_<n>]
+
+
 def backup(save_dir, prof, root=BACKUP_ROOT):
     stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     dst = os.path.join(root, os.path.basename(prof), "%s_%s" % (os.path.basename(save_dir), stamp))
+    n = 1
+    base = dst
+    while os.path.exists(dst):          # a second write within the same second
+        n += 1
+        dst = "%s_%d" % (base, n)
     shutil.copytree(save_dir, dst)
     return dst
+
+
+def backups_of(save, prof, root=BACKUP_ROOT):
+    """Backup folders of exactly this save, oldest first. The game's saves are called
+    autosave, autosave_job, autosave_job_3, autosave_drive_5, ...: a plain "autosave_*"
+    would also match the backups of autosave_job_3 and autosave_drive."""
+    rx = re.compile(re.escape(save) + BACKUP_NAME + "$")
+    found = []
+    for d in glob.glob(os.path.join(root, os.path.basename(prof), glob.escape(save) + "_*")):
+        m = rx.match(os.path.basename(d))
+        if m and os.path.isdir(d):
+            found.append((m.group(1), int(m.group(2) or 1), d))
+    return [d for _s, _n, d in sorted(found)]
 
 
 def patched(raw, kind, where, eur):
@@ -231,6 +284,8 @@ def patched(raw, kind, where, eur):
 def write_money(profile_dir, save, eur, backup_dir=BACKUP_ROOT):
     """Back up the save folder, write eur into its game.sii, read it back.
 
+    info.sii of the save gets the same amount (info_money_account: what the game's Load
+    screen shows; the game itself keeps it equal to the bank's money).
     Returns (money before, money after, backup folder). The caller checks that the
     game is closed. The file gets a fresh modified time; Steam Cloud compares the
     SHA with its cache anyway and uploads the changed file at the next launch.
@@ -239,9 +294,14 @@ def write_money(profile_dir, save, eur, backup_dir=BACKUP_ROOT):
     game = os.path.join(save_dir, "game.sii")
     kind, raw, before, where = read_money(game)
     new = patched(raw, kind, where, eur)
+    info = os.path.join(save_dir, "info.sii")
+    new_info = info_patched(info, eur) if os.path.isfile(info) else None
     dst = backup(save_dir, profile_dir, backup_dir)
     with open(game, "wb") as fh:
         fh.write(new)
+    if new_info is not None:
+        with open(info, "wb") as fh:
+            fh.write(new_info)
     _k, _r, after, _w = read_money(game)
     if after != eur:
         raise SiiError("read back %s, expected %s - put the backup back with --restore (%s)" % (after, eur, dst))
@@ -300,10 +360,10 @@ def main():
         raise SystemExit("not found: " + game)
 
     if a.restore:
-        pat = os.path.join(a.backup_dir, os.path.basename(prof), a.save + "_*")
-        cands = sorted(glob.glob(pat))
+        cands = backups_of(a.save, prof, a.backup_dir)
         if not cands:
-            raise SystemExit("no backup found: " + pat)
+            raise SystemExit("no backup found: " + os.path.join(
+                a.backup_dir, os.path.basename(prof), a.save + "_<time>"))
         if game_running():
             raise SystemExit("ETS2 is running - close the game first")
         src = cands[-1]

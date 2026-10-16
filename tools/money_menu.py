@@ -41,10 +41,11 @@ def parse_amount(text):
     """The amount typed by the player, as a whole number, or None if it is not one.
 
     "10000000000", "10 000 000 000", "10.000.000.000", "10,000,000,000", "10 млрд",
-    "1,5 млрд", "500 тыс руб" -> numbers; "", "abc", "-5", "1.5" (no word) -> None.
+    "1,5 млрд", "500 тыс руб", "₽10 000" -> numbers; "", "abc", "-5", "1.5" (no word) -> None.
     """
     s = text.strip().lower().replace(" ", " ").replace(" ", " ")
     s = re.sub(r"\s*" + _CURRENCY_WORDS + r"\.?\s*$", "", s)
+    s = re.sub(r"^\s*(₽|€|rub|eur)\s*", "", s)          # "₽10 000": the game puts the sign first
     mult = 1
     for pat, m in _WORDS:
         mm = re.search(r"\s*" + pat + r"\.?\s*$", s)

@@ -52,6 +52,8 @@ class ParseAmountTest(unittest.TestCase):
             "10 млрд": 10 ** 10, "10млрд": 10 ** 10, "10 миллиардов": 10 ** 10, "1,5 млрд": 1500000000,
             "2.25 млн": 2250000, "500 тыс": 500000, "500 тыс. руб.": 500000, "10 млрд ₽": 10 ** 10,
             "10000 руб": 10000, "0": 0,
+            # review 16.10: the game shows roubles with the sign first (currency_sign2 "₽")
+            "₽10 000": 10000, "€ 5000": 5000, "₽ 10 млрд": 10 ** 10,
         }
         for text, want in cases.items():
             self.assertEqual(money_menu.parse_amount(text), want, text)
@@ -208,6 +210,29 @@ class BatchFileTest(unittest.TestCase):
         self.assertEqual(rc, 0, out)
         self.assertIn("Ничего не записано", out)
         self.assertEqual(money_in(self.prof), 50000000)
+
+    def test_any_folder_name(self):
+        """Review 16.10: "Деньги ETS2.bat" did `call "%~dp0money.bat"`; call expands % and ^ in the
+        path a second time, so from a folder like "100%" or "a^b" it said "path not found"."""
+        import glob
+        for folder in ("Мои моды & ETS2 (копия)", "100%", "a^b", "x!y"):
+            dst = os.path.join(self.tmp, "copy", folder)
+            os.makedirs(os.path.join(dst, "tools"))
+            for f in glob.glob(os.path.join(ROOT, "tools", "*.py")):
+                shutil.copy(f, os.path.join(dst, "tools"))
+            for name in ("money.bat", "Деньги ETS2.bat"):
+                shutil.copy(os.path.join(ROOT, name), dst)
+            prof = make_profile(os.path.join(self.tmp, "p_" + str(len(os.listdir(os.path.join(self.tmp, "copy"))))))
+            env = dict(os.environ, ETS2_PYTHON='"%s"' % sys.executable, ETS2_NO_PAUSE="1",
+                       ETS2_FAKE_GAME_RUNNING="0")
+            cmdline = 'cmd.exe /s /c ""%s" --profile-dir "%s" --backup-dir "%s""' % (
+                os.path.join(dst, "Деньги ETS2.bat"), prof, os.path.join(self.tmp, "bk"))
+            r = subprocess.run(cmdline, input="10 млрд\n\n".encode("utf-8"), capture_output=True, env=env,
+                               cwd=self.tmp, timeout=120)
+            out = r.stdout.decode("utf-8", errors="replace")
+            self.assertEqual(r.returncode, 0, folder + ": " + out + r.stderr.decode("cp866", "replace"))
+            self.assertIn("ЗАПИСАНО", out, folder)
+            self.assertEqual(money_in(prof), 106393165, folder)
 
     def test_bat_files_are_crlf_and_start_with_utf8_console(self):
         for name in ("money.bat", "Деньги ETS2.bat"):

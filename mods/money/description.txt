@@ -2,12 +2,12 @@
 
 - Оплата рейсов в 10 раз выше: коэффициенты оплаты x10 (revenue_coef_per_km 0.9 -> 9, cargo_market 1.0 -> 10, driver 0.67 -> 6.7 и 0.70 -> 7), fixed_revenue 600 -> 6000.
 - Новый профиль начинает с 10 000 000 € вместо 2000 €.
-- Внутри также экономические правки No Fines и Free Services (отказ от груза, повреждение груза, опоздание, бесплатная эвакуация и экстренная заправка).
+- Внутри также экономические правки Free Services, No Sleep и No Fines (бесплатная эвакуация и экстренная заправка, нет усталости, отказ от груза, повреждение груза, опоздание).
 Порядок: ставить САМЫМ ВЕРХНИМ из модов Алексея.
 Деньги сразу: команды "cheat" в версии 1.61 нет; деньги в сохранении меняет tools\save_money.py.
 
 BIG MONEY (Alexey's personal mod, single player only)
 
 - Job pay 10x (pay coefficients x10, fixed_revenue x10). A new profile starts with 10,000,000 EUR.
-- Also contains the economy parts of No Fines and Free Services.
+- Also contains the economy parts of Free Services, No Sleep and No Fines.
 Order: put it at the TOP of Alexey's mods.

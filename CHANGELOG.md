@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.1 - 2026-10-16
+
+Independent review. The ten mods themselves are unchanged (their files are the 1.2.0 build, package version 1.2.0); the tools and one description changed.
+
+- **save_money.py --restore** took the backup of ANOTHER save. The game names its saves autosave, autosave_job, autosave_job_1..9, autosave_drive, autosave_drive_1..9; `--restore --save autosave` looked for `autosave_*` and took the last one by name, and `autosave_job_3_<time>` sorts after `autosave_<time>`. Now only backups named exactly `<save>_<time>` count. Law: `tests/test_save_money.py` SaveFolderTest.
+- **The Load screen showed the old money.** A save also keeps the amount in `info.sii` (`info_money_account`, what the Load screen shows; in every real save it equals the bank's money). Both tools wrote only `game.sii`; now `info.sii` gets the same amount.
+- Two writes of the same save within one second no longer fail (the backup folder gets a `_2` suffix).
+- **Деньги ETS2.bat** did not start from a folder with `%` or `^` in its name ("path not found"): `call` expands a full path a second time. It now goes to its folder and calls `money.bat` by a relative name. Law: BatchFileTest.test_any_folder_name.
+- The amount may start with the currency sign, as the game shows roubles: `₽10 000`.
+- **Free Services description**: "all 19 ferry and train crossings are free" was true only without map DLCs. The 19 are the crossings of the base game files; crossings that come with map DLCs (Scandinavia, Beyond the Baltic Sea, Iberia, Greece and others) are in those DLCs and keep their price. Workshop text, README and the local mod descriptions corrected.
+
 ## 1.2.0 - 2026-10-10
 
 - **Big Money** pays 10x for real. 1.0-1.1 changed `revenue_per_km_base` (15 to 150), which the 1.61 job price does not use, so pay stayed at the vanilla level (field report: freight market about 3,900 RUB/km = 41.5 EUR/km). Now `revenue_coef_per_km` 0.9 to 9, `cargo_market_revenue_coef_per_km` 1.0 to 10, `driver_revenue_coef_per_km` 0.67 to 6.7, `driver_cargo_market_revenue_coef_per_km` 0.70 to 7, `fixed_revenue` 600 to 6000; `revenue_per_km_base` stays 15. Rule and field data (delivery log of a 1.61 save, screenshot offers): `tests/test_pay_law.py`.
