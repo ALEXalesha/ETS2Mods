@@ -2,6 +2,9 @@
 
 Ten single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the tools that build them from the game's own files: a HashFS reader, save editors for money, level and skills, and a test suite.
 
+[![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-D97757?logo=claude&logoColor=white)](https://claude.com/claude-code)
+Code, tests and docs are written by Claude (Anthropic) in Claude Code. Ideas, testing and decisions - Alexey.
+
 > Not affiliated with or endorsed by SCS Software. "Euro Truck Simulator 2" is a trademark of SCS Software. The mods are fan-made and for single player only; they do not work on TruckersMP or in Convoy.
 
 | Mod (release file) | What it does |

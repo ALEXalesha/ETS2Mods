@@ -2,6 +2,9 @@
 
 Десять модов для одиночной игры Euro Truck Simulator 2 (версия 1.61) и инструменты, которые собирают их из файлов самой игры: распаковщик HashFS, правка денег, уровня и навыков в сохранении, тесты.
 
+[![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-D97757?logo=claude&logoColor=white)](https://claude.com/claude-code)
+Код, тесты и документация этого проекта написаны Claude (Anthropic) в Claude Code. Идеи, проверка и решения - Алексей.
+
 > Проект не связан с SCS Software и не одобрен ею. «Euro Truck Simulator 2» - товарный знак SCS Software. Моды фанатские, только для одиночной игры; в TruckersMP и Конвое они не работают.
 
 | Мод (файл в выпуске) | Что делает |
