@@ -6,10 +6,12 @@
   "type_tag": "Others",
   "en": [
     "- All 14 offence fines are 0 and offences are not registered: speeding, speed cameras, red light, wrong way, crash, no lights, weigh station, inspection, hard shoulder, illegal trailer, border, damaged vehicle, missed rest.",
-    "- Cancelling a job costs nothing (was 12,000 EUR); cargo damage no longer reduces the pay; late jobs stay valid for 30 days."
+    "- Cancelling a job costs nothing (was 12,000 EUR); cargo damage no longer reduces the pay; late jobs stay valid for 30 days.",
+    "- Some of this can also be switched off in the game options - check them first if you only want that. Options do not touch the economy part: job cancel price, pay cut for cargo damage and late jobs."
   ],
   "ru": [
     "- Все 14 штрафов равны 0 и нарушения не засчитываются: скорость, камеры, красный свет, встречка, ДТП, фары, весы, досмотр, обочина, нелегальный прицеп, граница, неисправная машина, пропуск отдыха.",
-    "- Отказ от груза бесплатный (был 12 000 €), повреждение груза не уменьшает оплату, при опоздании рейс в силе 30 дней."
+    "- Отказ от груза бесплатный (был 12 000 €), повреждение груза не уменьшает оплату, при опоздании рейс в силе 30 дней.",
+    "- Часть этого можно выключить и в настройках игры - если нужно только это, сначала загляните туда. Экономическую часть настройки не трогают: цена отказа от груза, урезание оплаты за повреждение и опоздание."
   ]
 }

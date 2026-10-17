@@ -5,11 +5,11 @@
   "tag_ru": "без усталости",
   "type_tag": "Others",
   "en": [
-    "- The driver never gets tired: maximum_driving_time 660 -> 10,000,000 minutes. (Without a mod: untick \"Fatigue simulation\" in the game options.)",
+    "- The game can do this by itself: Options -> Gameplay -> untick \"Fatigue simulation\". The mod only does it for you: the driver never gets tired (maximum_driving_time 660 -> 10,000,000 minutes).",
     "- Includes the economy part of OpenRoad: No Fines (it shares def/economy_data.sii)."
   ],
   "ru": [
-    "- Водитель не устаёт: maximum_driving_time 660 -> 10 000 000 минут. (Без мода: снять галочку \"Эмуляция усталости\" в настройках.)",
+    "- То же самое есть в самой игре: Настройки -> Игровой процесс -> снять галочку \"Эмуляция усталости\". Мод просто делает это за вас: водитель не устаёт (maximum_driving_time 660 -> 10 000 000 минут).",
     "- Внутри также экономическая часть OpenRoad: No Fines (общий файл def/economy_data.sii)."
   ]
 }
