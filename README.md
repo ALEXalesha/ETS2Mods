@@ -65,7 +65,7 @@ Top to bottom (`mods/order.json`):
 10. More Traffic
 11. other mods
 
-Some mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep, No Fines), the 203 engine files (Hyper/Super Power, No Fuel) and `def/vehicle/physics.sii` (Hyper/Super Power, No Rollover). The game uses only the top-most copy, so each mod also carries the changes of every mod below it in this order, and nothing is lost. Hyper Power replaces Super Power, so it does not carry Super Power's x3. The flip side: a mod used alone also brings the lower mods' changes for the shared files. For example, Big Money alone also gives free towing.
+Some mods share a file: `def/economy_data.sii` (Big Money, Free Services, No Sleep, No Fines), the 203 engine files (Hyper/Super Power, No Fuel) and `def/vehicle/physics.sii` (Hyper/Super Power, No Rollover). The game uses only the top-most copy, so each mod also carries the changes of every mod below it in this order, and nothing is lost. Hyper Power replaces Super Power, so it does not carry Super Power's x3. The flip side: a mod used alone also brings the lower mods' changes for the shared files. For example, Big Money alone also gives free towing. Other authors' mods that replace the same files (physics, engines, economy, traffic) override ours when they are higher in the list, and the other way round; every Workshop description lists the files its mod replaces.
 
 Other mods that replace the same files (`police_data.sii`, `damage_data.sii`, `traffic_data.sii`, `physics.sii`, engine or transmission files) override, or are overridden by, these mods depending on the order.
 

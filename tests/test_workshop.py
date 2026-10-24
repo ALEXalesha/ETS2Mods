@@ -155,6 +155,25 @@ class WorkshopTest(unittest.TestCase):
             self.assertIn("-----", only)
             self.assertIn(only, rt(os.path.join(base, "steam_page.txt")))
 
+    def test_other_authors_line_names_every_replaced_file(self):
+        """Алексей 24.10 («только написать в описаниях»): каждый мод честно пишет, какие файлы игры
+        заменяет целиком - чужой мод с тем же файлом перекрывает его. Строка строится из mod.json,
+        поэтому не отстаёт от сборки; у каждого шаблона пути - человеческое имя, не «*»."""
+        import build_workshop
+        order = build_mods.load_order()
+        for i, name in enumerate(order):
+            base = [b for b in folders() if os.path.basename(b) == build_workshop.folder_name(i, name)][0]
+            text = rt(os.path.join(base, "upload", "universal", "mod_description.txt"))
+            for lang, head in (("en", "Other authors' mods"), ("ru", "Моды других авторов")):
+                files = build_workshop.replaced_files(name, lang)
+                self.assertTrue(files, name)
+                for f in files:
+                    self.assertNotIn("*", f, "%s: no human name for %s" % (name, f))
+                line = [l for l in text.splitlines() if l.startswith(head)]
+                self.assertEqual(len(line), 1, "%s %s" % (name, lang))
+                for f in files:
+                    self.assertIn(f, line[0], "%s %s" % (name, lang))
+
     def test_changelog_for_update(self):
         """Big Money 1.2.0 is an Update of an existing Workshop item: a change note EN then RU,
         CRLF like the other paste files, naming the coefficients that changed. Only the mods

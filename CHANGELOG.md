@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2 - 2026-10-24
+
+Descriptions only, the mod packages are unchanged.
+
+- Every Workshop description lists the game files its mod replaces and says that another author's mod with the same file overrides it when higher in the Mod Manager (and the other way round). Players with large mod lists saw our physics, engine, economy and traffic changes disappear under other mods. The line is built from mod.json; tests/test_workshop.py checks it for all ten mods.
+- Только описания, пакеты модов те же. В описании каждого мода в Мастерской перечислены файлы игры, которые он заменяет, и сказано, что чужой мод с тем же файлом перекрывает его, если стоит выше в Менеджере модов (и наоборот).
+
 ## 1.2.1 - 2026-10-16
 
 Independent review. The ten mods themselves are unchanged (their files are the 1.2.0 build, package version 1.2.0); the tools and one description changed.

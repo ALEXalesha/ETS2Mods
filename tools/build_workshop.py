@@ -71,6 +71,44 @@ def order_lines(order, lang):
     return out
 
 
+# Names of the game files a mod replaces, for the "other authors' mods" line. A mod replaces
+# whole files: another author's mod with the same file wins if it is higher in the Mod Manager.
+FILE_NAMES = {
+    "def/vehicle/truck/*/engine/*.sii": ("the truck engine files", "файлы двигателей грузовиков"),
+    "def/vehicle/truck/*/transmission/*.sii": ("the truck gearbox files", "файлы коробок передач"),
+    "def/vehicle/f_tire/*.sii": ("the tyre files", "файлы шин"),
+    "def/vehicle/r_tire/*.sii": ("the tyre files", "файлы шин"),
+    "def/country/*.sui": ("the country files", "файлы стран"),
+    "def/ferry/connection/*.sii": ("the ferry connection files", "файлы паромных переправ"),
+    "def/initial_save/normal/game.sii": ("the starting save of a new profile", "стартовое сохранение нового профиля"),
+}
+
+
+def replaced_files(name, lang):
+    """Human names of the game files the mod replaces, in mod.json order, no repeats."""
+    k = 0 if lang == "en" else 1
+    out = []
+    for pattern in build_mods.load_spec(name)["patches"]:
+        if pattern in FILE_NAMES:
+            label = FILE_NAMES[pattern][k]
+        elif "*" in pattern:
+            label = pattern
+        else:
+            label = pattern.rsplit("/", 1)[-1]
+        if label not in out:
+            out.append(label)
+    return out
+
+
+def other_mods_line(name, lang):
+    files = ", ".join(replaced_files(name, lang))
+    if lang == "en":
+        return ("Other authors' mods: this mod replaces whole game files (%s). A mod by another author that replaces "
+                "any of them overrides this one if it is higher in the Mod Manager, and the other way round." % files)
+    return ("Моды других авторов: этот мод заменяет файлы игры целиком (%s). Чужой мод, заменяющий любой из них, "
+            "перекрывает этот, если стоит выше в Менеджере модов, и наоборот." % files)
+
+
 def description(name, order, version_glob):
     w = ws(name)
     ver = version_glob.rstrip(".*")
@@ -80,6 +118,8 @@ def description(name, order, version_glob):
         "already carry the changes of the ones below them:",
     ] + order_lines(order, "en") + [
         "",
+        other_mods_line(name, "en"),
+        "",
         "Compatibility: game version %s (built from the %s game files), single player only. "
         "Not for TruckersMP or Convoy. After a big game update the mod may need an update." % (ver, ver),
     ]
@@ -88,6 +128,8 @@ def description(name, order, version_glob):
         "Порядок в Менеджере модов (верхний - главный). Моды этой серии, меняющие один и тот же файл, "
         "уже несут правки тех, что ниже:",
     ] + order_lines(order, "ru") + [
+        "",
+        other_mods_line(name, "ru"),
         "",
         "Совместимость: версия игры %s (собрано из файлов %s), только одиночная игра. "
         "Не для TruckersMP и Конвоя. После крупного обновления игры мод может потребовать обновления." % (ver, ver),
