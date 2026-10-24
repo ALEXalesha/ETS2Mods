@@ -341,6 +341,68 @@ def write_scs(out_path, files):
             z.writestr(zi, files[p])
 
 
+def missing_icon_materials(game_dir, texts):
+    """{path: bytes}: icon materials that the patched accessory units name but no game archive has.
+
+    ETS2 1.61 names 37 trailer chassis icons that exist nowhere; the game shrugs, the
+    Workshop uploader refuses the mod ("Unable to find preview icon"). For each missing
+    icon a sibling icon material of the same folder (same brand) is copied under the
+    missing name, so the unit stays the game's own and the uploader is satisfied."""
+    archives = [HashFs(p) for p in sorted(glob.glob(os.path.join(game_dir, "*.scs")))]
+
+    def find(path):
+        for fs in archives:
+            e = fs.get(path)
+            if e is not None and not e.is_dir:
+                return fs, e
+        return None
+
+    def listing(folder):
+        names = set()
+        for fs in archives:
+            try:
+                _d, f = fs.listdir(folder)
+            except KeyError:
+                continue
+            names.update(x for x in f if x.endswith(".mat"))
+        return sorted(names)
+
+    out = {}
+    for text in texts.values():
+        for icon in re.findall(r'^\s*icon\s*:\s*"([^"]+)"', text, re.M):
+            mat = "material/ui/accessory/%s.mat" % icon
+            if mat in out or find(mat):
+                continue
+            folder = mat.rsplit("/", 1)[0]
+            candidates = [folder + "/" + n for n in listing(folder)]
+            if not candidates:
+                # the whole brand folder is missing: take an icon of the closest-named sibling folder
+                parent, brand = folder.rsplit("/", 1)
+                subs = set()
+                for fs in archives:
+                    try:
+                        d, _f = fs.listdir(parent)
+                    except KeyError:
+                        continue
+                    subs.update(d)
+                for sub in sorted(subs, key=lambda s: (not s.startswith(brand.split("_")[0]), s)):
+                    candidates = [parent + "/" + sub + "/" + n for n in listing(parent + "/" + sub)]
+                    if candidates:
+                        break
+            for cand in candidates:
+                hit = find(cand)
+                if hit:
+                    # texture paths in a .mat are relative to its folder: make them absolute
+                    src_dir = "/" + cand.rsplit("/", 1)[0]
+                    text = hit[0].read_entry(hit[1]).decode("utf-8")
+                    text = re.sub(r'(source\s*:\s*")([^"/][^"]*)"', lambda m: m.group(1) + src_dir + "/" + m.group(2) + '"', text)
+                    out[mat] = text.encode("utf-8")
+                    break
+            else:
+                raise PatchError("no icon %s and no sibling icon near %s" % (mat, folder))
+    return out
+
+
 def build_all(game_dir, out_dir, verbose=True):
     """Build every mod into out_dir. Returns {mod_name: {"file", "spec", "files", "log"}}."""
     version = game_version(game_dir)
@@ -363,6 +425,8 @@ def build_all(game_dir, out_dir, verbose=True):
             files["mod_description.txt"] = fh.read()
         with open(os.path.join(mod_src, "mod_icon.jpg"), "rb") as fh:
             files["mod_icon.jpg"] = fh.read()
+        if spec.get("fill_missing_icons"):
+            files.update(missing_icon_materials(game_dir, texts))
         out = os.path.join(out_dir, spec["file"])
         write_scs(out, files)
         result[name] = {"file": out, "spec": spec, "files": files, "log": log,

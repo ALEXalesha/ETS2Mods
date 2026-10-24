@@ -210,6 +210,9 @@ class WorkshopTest(unittest.TestCase):
                         self.assertIn(rel, ("mod_icon.jpg", "mod_description.txt"), "unreferenced " + rel)
                     if f.endswith(".sii"):
                         self.assertTrue(rb(p).startswith(b"SiiNunit"), rel)
+                    if f.endswith(".mat"):   # 25.10: icon materials the game lacks (No Rollover), text, no textures
+                        self.assertTrue(rel.startswith("material/ui/accessory/"), rel)
+                        continue
                     self.assertTrue(f.endswith((".sii", ".sui", ".txt", ".jpg")), rel)
 
     def test_no_zero_divisors(self):

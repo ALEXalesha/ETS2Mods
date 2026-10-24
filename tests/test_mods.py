@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(ROOT, "tools"))
 
 import build_mods  # noqa: E402
 from cityhash103 import cityhash64  # noqa: E402
+from hashfs import HashFs  # noqa: E402
 
 GAME = build_mods.DEFAULT_GAME
 HAVE_GAME = os.path.isfile(os.path.join(GAME, "def.scs"))
@@ -95,6 +96,22 @@ class ArchiveListingTest(unittest.TestCase):
                 stack.extend(p + "/" + d for d in dirs)
         self.assertGreater(seen, 1000)
         self.assertEqual(missing[:5], [])
+
+    def test_every_icon_of_a_patched_unit_exists(self):
+        """25.10: the Workshop uploader refused No Rollover - 37 trailer chassis name icons that ETS2 1.61 lacks
+        («Unable to find preview icon»). Every icon a built mod's unit names is in the game or in the mod."""
+        archives = [HashFs(p) for p in sorted(glob.glob(os.path.join(GAME, "*.scs")))]
+        for name, r in built().items():
+            files = r["files"]
+            for path, data in files.items():
+                if not path.startswith("def/"):
+                    continue
+                for icon in re.findall(r'^\s*icon\s*:\s*"([^"]+)"', data.decode("utf-8"), re.M):
+                    if not path.startswith("def/vehicle/trailer"):
+                        continue
+                    mat = "material/ui/accessory/%s.mat" % icon
+                    ok = mat in files or any(fs.get(mat) is not None for fs in archives)
+                    self.assertTrue(ok, "%s %s: no %s" % (name, path, mat))
 
     def test_no_rollover_lowers_cargo_cog_in_every_trailer(self):
         """Алексей 24.10-25.10: стабилизатор не спасал; центр тяжести груза на 0.5 м ниже + ползунки на максимум -

@@ -277,7 +277,7 @@ def build(out_dir, verbose=True):
         with open(os.path.join(base, "upload", "versions.sii"), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(VERSIONS_SII)
         for path, data in r["files"].items():
-            if not path.startswith("def/"):
+            if not path.startswith(("def/", "material/")):   # material/: icons the game lacks (No Rollover)
                 continue
             if data.startswith(BOM):
                 data = data[len(BOM):]

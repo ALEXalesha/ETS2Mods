@@ -4,6 +4,7 @@
   "display_name": "No Rollover (Alexey)",
   "category": "physics",
   "version": "1.2.1",
+  "fill_missing_icons": true,
   "icon": {
     "title": "NO ROLLOVER",
     "subtitle": "НЕ ПЕРЕВОРАЧИВАТЬСЯ",
