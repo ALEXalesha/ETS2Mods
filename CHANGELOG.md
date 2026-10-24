@@ -2,10 +2,12 @@
 
 ## 1.2.2 - 2026-10-24
 
-Descriptions only, the mod packages are unchanged.
+Descriptions, plus one new game file in Free Services.
 
+- Free Services: the game now has the Halloween event "country" (`def/country/halloween.sui`); the build picked it up, its fuel is free too. The other mod files are the same as in 1.2.1 apart from the description inside each `.scs`.
 - Every Workshop description lists the game files its mod replaces and says that another author's mod with the same file overrides it when higher in the Mod Manager (and the other way round). Players with large mod lists saw our physics, engine, economy and traffic changes disappear under other mods. The line is built from mod.json; tests/test_workshop.py checks it for all ten mods.
-- Только описания, пакеты модов те же. В описании каждого мода в Мастерской перечислены файлы игры, которые он заменяет, и сказано, что чужой мод с тем же файлом перекрывает его, если стоит выше в Менеджере модов (и наоборот).
+- Free Services: в игре появилась событийная «страна» Хэллоуин (`def/country/halloween.sui`), сборка её подхватила - топливо там тоже бесплатное. Остальные файлы модов те же, что в 1.2.1, кроме описания внутри `.scs`.
+- В описании каждого мода в Мастерской перечислены файлы игры, которые он заменяет, и сказано, что чужой мод с тем же файлом перекрывает его, если стоит выше в Менеджере модов (и наоборот).
 
 ## 1.2.1 - 2026-10-16
 
