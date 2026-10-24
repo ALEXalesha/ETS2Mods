@@ -1,14 +1,11 @@
 БЕЗ ОПРОКИДЫВАНИЯ (личный мод Алексея, только одиночная игра)
 
-- Передний стабилизатор поперечной устойчивости в 3 раза жёстче
-  (sway_bar_stiffness_factor 1.0 -> 3.0): кабина меньше кренится в поворотах.
-- Главное средство - в Настройках игры: "Устойчивость транспортного средства"
-  и "Устойчивость прицепа" на максимум. Они опускают центр тяжести.
-Полностью запретить переворот через def-файлы нельзя: центр тяжести задают модели.
+- Центр тяжести груза во всех 350 прицепах на 0,5 м ниже: гружёный прицеп не ложится на бок в резком повороте.
+- Передний стабилизатор в 3 раза жёстче (sway_bar_stiffness_factor 1.0 -> 3.0).
+- Обязательно: в настройках «Геймплей» ползунки «Устойчивость транспортного средства» и «Устойчивость прицепа» на максимум - на минимуме прицеп всё равно ложится на бок (проверено в игре).
 
 NO ROLLOVER (Alexey's personal mod, single player only)
 
+- Cargo centre of gravity 0.5 m lower in all 350 trailers: a loaded trailer does not tip over in a sharp turn.
 - Front anti-roll bar 3x stiffer (sway_bar_stiffness_factor 1.0 -> 3.0).
-- The main tool is in the game options: "Vehicle stability" and "Trailer stability"
-  at maximum, they lower the centre of gravity.
-A hard "never tip over" is not possible through def files.
+- Required: set the Gameplay options "Vehicle stability" and "Trailer stability" to maximum - at minimum a loaded trailer still tips over (checked in the game).

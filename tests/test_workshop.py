@@ -180,7 +180,8 @@ class WorkshopTest(unittest.TestCase):
         with a note for their current version get the file."""
         with_note = [b for b in folders() if os.path.exists(os.path.join(b, "steam_changelog.txt"))]
         self.assertEqual([os.path.basename(b) for b in with_note],
-                         ["01_OpenRoad_Hyper_Power", "03_OpenRoad_Big_Money"])   # Hyper 1.2.1: 24.10
+                         ["01_OpenRoad_Hyper_Power", "03_OpenRoad_Big_Money",
+                          "08_OpenRoad_No_Rollover"])   # Hyper 1.2.1: 24.10, No Rollover 1.2.1: 25.10
         hyper = rb(os.path.join(with_note[0], "steam_changelog.txt")).decode("utf-8")
         self.assertTrue(hyper.startswith("1.2.1 - "), hyper[:40])
         self.assertIn("195", hyper)

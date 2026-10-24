@@ -3,7 +3,7 @@
   "file": "alexey_no_rollover.scs",
   "display_name": "No Rollover (Alexey)",
   "category": "physics",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icon": {
     "title": "NO ROLLOVER",
     "subtitle": "НЕ ПЕРЕВОРАЧИВАТЬСЯ",
@@ -23,6 +23,210 @@
       {
         "key": "sway_bar_stiffness_factor",
         "value": "3.0"
+      }
+    ],
+    "def/vehicle/trailer_owned/*/*/*.sii": [
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_mass_max",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_offset_min",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_max: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_min: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      }
+    ],
+    "def/vehicle/trailer/*/*.sii": [
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_mass_max",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_offset_min",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_max: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_min: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      }
+    ],
+    "def/vehicle/trailer/*/*/*.sii": [
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_mass_max",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "or_insert_after_key": "cog_cargo_offset_min",
+        "note": "cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_min",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "key": "cog_cargo_offset_max",
+        "value": "(0.0, -0.5, 0.0)",
+        "per_unit": "accessory_chassis_data"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "cog_cargo_offset_min",
+        "exclude": "cog_cargo_mass_max",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_max: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_offset_min: (0.0, -0.5, 0.0)\t# [mod alexey_no_rollover] cargo centre of gravity 0.5 m lower: no tipping in a sharp turn with a loaded trailer"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_max: 30000.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
+      },
+      {
+        "require": "accessory_chassis_data",
+        "exclude": "cog_cargo_",
+        "insert_after_unit": "accessory_chassis_data",
+        "line": "cog_cargo_mass_min: 0.0\t# [mod alexey_no_rollover] cargo mass range for the offset"
       }
     ]
   }

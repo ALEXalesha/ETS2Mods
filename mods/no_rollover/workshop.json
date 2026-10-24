@@ -1,17 +1,31 @@
 {
   "title": "OpenRoad: No Rollover",
   "short": "NO ROLLOVER",
-  "tag_en": "stiffer anti-roll bar",
-  "tag_ru": "жёстче стабилизатор",
+  "tag_en": "lower cargo centre of gravity",
+  "tag_ru": "ниже центр тяжести груза",
   "type_tag": "Physics",
   "en": [
+    "- Cargo centre of gravity 0.5 m lower in every trailer of the game and installed DLCs (350 trailer chassis, cog_cargo_offset (0, -0.5, 0); most ETS2 trailers had no such key, the mod adds it): a loaded trailer no longer tips over in a sharp turn. Checked in the game.",
     "- Front anti-roll bar 3x stiffer (sway_bar_stiffness_factor 1.0 -> 3.0): less body roll in corners.",
-    "- For the biggest effect also set the game options \"Vehicle stability\" and \"Trailer stability\" (Gameplay) to maximum: they lower the centre of gravity.",
-    "Limits: a hard \"never tips over\" is not possible through def files - the centre of gravity comes from the truck models."
+    "- Required: set the Gameplay options \"Vehicle stability\" and \"Trailer stability\" to maximum - at minimum a loaded trailer still tips over (checked in the game).",
+    "Limits: a truck can still roll in a crash or off a cliff - the mod removes the tipping in normal driving."
   ],
   "ru": [
+    "- Центр тяжести груза на 0,5 м ниже во всех прицепах игры и DLC (350 шасси, cog_cargo_offset (0, -0,5, 0); у большинства прицепов ETS2 этого ключа не было, мод его добавляет): гружёный прицеп больше не ложится на бок в резком повороте. Проверено в игре.",
     "- Передний стабилизатор в 3 раза жёстче (sway_bar_stiffness_factor 1.0 -> 3.0): меньше крен в поворотах.",
-    "- Для полного эффекта поставить в настройках \"Устойчивость транспортного средства\" и \"Устойчивость прицепа\" на максимум: они опускают центр тяжести.",
-    "Ограничения: полностью запретить переворот через def-файлы нельзя - центр тяжести задают модели."
-  ]
+    "- Обязательно: в настройках «Геймплей» ползунки «Устойчивость транспортного средства» и «Устойчивость прицепа» на максимум - на минимуме прицеп всё равно ложится на бок (проверено в игре).",
+    "Ограничения: в аварии или с обрыва грузовик всё ещё может перевернуться - мод убирает опрокидывание при обычной езде."
+  ],
+  "changelog": {
+    "1.2.1": {
+      "en": [
+        "1.2.1 - the mod really stops the tipping now.",
+        "Players wrote that it did not work: the stiffer anti-roll bar alone could not keep a loaded trailer up in a sharp turn. Now the cargo centre of gravity is 0.5 m lower in all 350 trailer chassis. Also set both stability sliders (Gameplay) to maximum - checked in the game."
+      ],
+      "ru": [
+        "1.2.1 - мод теперь правда не даёт опрокидываться.",
+        "Игроки писали, что не работает: одного жёсткого стабилизатора не хватало, гружёный прицеп ложился на бок в резком повороте. Теперь центр тяжести груза на 0,5 м ниже во всех 350 шасси прицепов. И поставьте оба ползунка устойчивости («Геймплей») на максимум - проверено в игре."
+      ]
+    }
+  }
 }

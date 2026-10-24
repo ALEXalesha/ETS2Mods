@@ -28,10 +28,18 @@ Patch operations (mod.json, "patches": {path_pattern: [op, ...]}):
                                             fails if A is already set
   {"insert_after": TEXT, "line": L, "absent_key": A}
                                             add line L after the anchor text
+  {"key": K, "value": V, "or_insert_after_key": A, "note": N, "per_unit": C}
+                                            set K where the file has it,
+                                            otherwise add "K: V" after A
+  {"insert_after_unit": C, "line": L, "absent_key": A}
+                                            add line L right after the "{" of
+                                            every "C : name" unit
   "per_unit": CLASS   instead of count: one match per "CLASS :" unit header
   "optional": true    zero matches allowed (count or per_unit as maximum)
 Path patterns may use * in any part, e.g. def/vehicle/truck/*/engine/*.sii;
-"require": TEXT keeps only files that contain TEXT.
+"require": TEXT keeps only files that contain TEXT, "exclude": TEXT drops files that
+contain it. Both belong to the operation: operations of one pattern with different
+filters land on different files (No Rollover: trailer chassis with and without cog keys).
 
 Usage:
   python tools/build_mods.py [--game DIR] [--install]
@@ -153,6 +161,19 @@ def apply_patch(text, patch, mod_name, log, path):
                     line.split(":", 1)[1].split("#")[0].strip(), mod_name))
         return text.replace(anchor, anchor + "\n" + line, 1)
 
+    if "insert_after_unit" in patch:
+        rx = re.compile(r"^[ \t]*%s[ \t]*:[^\n{]*\n?[ \t]*\{[^\n]*$" % re.escape(patch["insert_after_unit"]), re.M)
+        hits = list(rx.finditer(text))
+        if not hits:
+            raise PatchError("%s: no %s unit in %s" % (mod_name, patch["insert_after_unit"], path))
+        line = patch["line"]
+        for m in reversed(hits):
+            text = text[:m.end()] + "\n\t" + line + text[m.end():]
+        for _ in hits:
+            log.append((path, line.strip().split(":")[0], "(not set)",
+                        line.split(":", 1)[1].split("#")[0].strip(), mod_name))
+        return text
+
     if "insert_after_key" in patch:
         rx = re.compile(LINE_RE.format(key=key_regex(patch["insert_after_key"])), re.M)
         hits = list(rx.finditer(text))
@@ -168,6 +189,12 @@ def apply_patch(text, patch, mod_name, log, path):
 
     key = patch["key"]
     rx = re.compile(LINE_RE.format(key=key_regex(key)), re.M)
+    if "or_insert_after_key" in patch and not rx.search(text):
+        # the key is not in this file: add it after the anchor key, like insert_after_key
+        note = patch.get("note", "")
+        line = "%s: %s	# [mod %s] %s" % (key, patch["value"], mod_name, note)
+        return apply_patch(text, {"insert_after_key": patch["or_insert_after_key"], "line": line.rstrip(),
+                                  "per_unit": patch["per_unit"]}, mod_name, log, path)
     found = []
 
     def repl(m):
@@ -206,7 +233,7 @@ def load_order():
     return order
 
 
-def expand_path(defs, pattern, require=None):
+def expand_path(defs, pattern, require=None, exclude=None):
     """Expand a path pattern with * in any component against the layered file system."""
     parts = pattern.split("/")
     cur = [""]
@@ -229,6 +256,8 @@ def expand_path(defs, pattern, require=None):
     hits = sorted(h for h in set(cur) if defs.source(h) is not None)
     if require:
         hits = [h for h in hits if require.encode() in defs.read(h)]
+    if exclude:
+        hits = [h for h in hits if exclude.encode() not in defs.read(h)]
     if not hits:
         raise PatchError("no files match %s" % pattern)
     return hits
@@ -238,14 +267,30 @@ def own_plan(spec, defs):
     """{real_path: [patch, ...]} for one mod's own patches."""
     plan = {}
     for pattern, patches in spec["patches"].items():
-        require = None
-        ops = []
+        groups = []                       # [(require, exclude, [ops])] in mod.json order
         for p in patches:
-            if "require" in p:
-                require = p["require"]
-            ops.append(p)
-        for real in expand_path(defs, pattern, require):
-            plan.setdefault(real, []).extend(ops)
+            f = (p.get("require"), p.get("exclude"))
+            if groups and groups[-1][:2] == f:
+                groups[-1][2].append(p)
+            else:
+                groups.append((f[0], f[1], [p]))
+        if len(groups) > 1 and groups[0][1] is None and all(g[1] is None for g in groups):
+            # old meaning: one "require" anywhere in the list filters the whole pattern
+            req = next((g[0] for g in groups if g[0]), None)
+            groups = [(req, None, [p for g in groups for p in g[2]])]
+        matched = 0
+        for require, exclude, ops in groups:
+            try:
+                hits = expand_path(defs, pattern, require, exclude)
+            except PatchError:
+                if len(groups) == 1:
+                    raise
+                continue                  # a filter group may be empty for one pattern
+            matched += len(hits)
+            for real in hits:
+                plan.setdefault(real, []).extend(ops)
+        if not matched:
+            raise PatchError("no files match %s" % pattern)
     return plan
 
 

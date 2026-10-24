@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.4 - 2026-10-25
+
+- No Rollover 1.2.1 really stops the tipping: the cargo centre of gravity is 0.5 m lower in all 350 trailer chassis (`cog_cargo_offset_min/max` -> (0, -0.5, 0)). 313 chassis had no such keys: the mod adds them with the mass range 0-30000 kg; 37 had their own. Players reported that the anti-roll bar alone did not work; checked in the game: works with both stability sliders at maximum, not at minimum - the descriptions say so.
+- Builder: operations carry their own `require`/`exclude` file filter, new `insert_after_unit`, `or_insert_after_key` from the ATS builder. Law: every trailer chassis block has exactly one of each of the four keys, both points (0, -0.5, 0).
+
+---
+
+- No Rollover 1.2.1 правда не даёт опрокидываться: центр тяжести груза на 0,5 м ниже во всех 350 шасси прицепов (`cog_cargo_offset_min/max` -> (0, -0.5, 0)). У 313 шасси этих ключей не было - мод добавляет их с диапазоном массы 0-30000 кг; у 37 были свои. Игроки писали, что один стабилизатор не работает; проверено в игре: работает с обоими ползунками устойчивости на максимуме, на минимуме - нет, описания об этом говорят.
+- Сборщик: у операции свой фильтр файлов `require`/`exclude`, новая `insert_after_unit`, `or_insert_after_key` из сборщика ATS. Закон: в каждом блоке шасси прицепа ровно по одному из четырёх ключей, обе точки (0, -0.5, 0).
+
 ## 1.2.3 - 2026-10-24
 
 - Hyper Power 1.2.1: the x0.35 final drive is in every gearbox now. 25 of 195 gearboxes (retarder and overdrive variants) were left stock: tools/cityhash103.py hashed paths over 64 characters with the CityHash 1.0 branch, but HashFS uses the 1.1 branch there, so those game files were invisible. Found in the ATS project, where it hit 83 of 181 gearboxes. Engines were not affected (all 203 paths are shorter), so No Fuel and the torque changes were complete.

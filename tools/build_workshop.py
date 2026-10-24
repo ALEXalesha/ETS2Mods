@@ -80,6 +80,9 @@ FILE_NAMES = {
     "def/vehicle/r_tire/*.sii": ("the tyre files", "файлы шин"),
     "def/country/*.sui": ("the country files", "файлы стран"),
     "def/ferry/connection/*.sii": ("the ferry connection files", "файлы паромных переправ"),
+    "def/vehicle/trailer_owned/*/*/*.sii": ("the trailer chassis files", "файлы шасси прицепов"),
+    "def/vehicle/trailer/*/*.sii": ("the trailer chassis files", "файлы шасси прицепов"),
+    "def/vehicle/trailer/*/*/*.sii": ("the trailer chassis files", "файлы шасси прицепов"),
     "def/initial_save/normal/game.sii": ("the starting save of a new profile", "стартовое сохранение нового профиля"),
 }
 

@@ -52,7 +52,8 @@ def jpeg_size(data):
 
 
 def values(text, key):
-    return [m.group(1) for m in re.finditer(r"^\s*%s\s*:\s*([^#\s]+)" % re.escape(key), text, re.M)]
+    # a tuple value like (0.0, -0.5, 0.0) is one value
+    return [m.group(1) for m in re.finditer(r"^\s*%s\s*:\s*(\([^)]*\)|[^#\s]+)" % re.escape(key), text, re.M)]
 
 
 class CityHashTest(unittest.TestCase):
@@ -94,6 +95,22 @@ class ArchiveListingTest(unittest.TestCase):
                 stack.extend(p + "/" + d for d in dirs)
         self.assertGreater(seen, 1000)
         self.assertEqual(missing[:5], [])
+
+    def test_no_rollover_lowers_cargo_cog_in_every_trailer(self):
+        """Алексей 24.10-25.10: стабилизатор не спасал; центр тяжести груза на 0.5 м ниже + ползунки на максимум -
+        работает. У каждого блока шасси прицепа ровно по одной строке четырёх ключей, обе точки (0, -0.5, 0)
+        (ловит и дубли: у прицепа-лидера силосовоза свои точки без диапазона массы)."""
+        files = built()["no_rollover"]["files"]
+        trailers = [p for p in files if p.startswith("def/vehicle/trailer")]
+        self.assertGreaterEqual(len(trailers), 300)
+        for p in trailers:
+            text = files[p].decode("utf-8")
+            n = len(re.findall(r"^\s*accessory_chassis_data\s*:", text, re.M))
+            self.assertGreater(n, 0, p)
+            for key in ("cog_cargo_mass_min", "cog_cargo_mass_max", "cog_cargo_offset_min", "cog_cargo_offset_max"):
+                self.assertEqual(len(re.findall(r"^\s*%s\s*:" % key, text, re.M)), n, "%s %s" % (p, key))
+            for v in re.findall(r"^\s*cog_cargo_offset_(?:min|max)\s*:\s*\(([^)]*)\)", text, re.M):
+                self.assertEqual([float(x) for x in v.split(",")], [0.0, -0.5, 0.0], p)
 
     def test_hyper_power_covers_every_gearbox(self):
         defs = build_mods.LayeredFs(GAME)

@@ -17,7 +17,7 @@ Code, tests and docs are written by Claude (Anthropic) in Claude Code. Ideas, te
 | OpenRoad: No Sleep (`OpenRoad_No_Sleep.scs`) | The driver never gets tired. |
 | OpenRoad: No Fuel (`OpenRoad_No_Fuel.scs`) | Engines use 1/10000 of the fuel. |
 | OpenRoad: No Fines (`OpenRoad_No_Fines.scs`) | No police or camera fines, no cancel fine, no cargo damage pay cut, 30 days for late jobs. |
-| OpenRoad: No Rollover (`OpenRoad_No_Rollover.scs`) | Front anti-roll bar 3x stiffer; plus the game's stability sliders. |
+| OpenRoad: No Rollover (`OpenRoad_No_Rollover.scs`) | Cargo centre of gravity 0.5 m lower in all 350 trailers, anti-roll bar 3x stiffer; stability sliders at max. |
 | OpenRoad: No Damage (`OpenRoad_No_Damage.scs`) | No collision damage, no wear, no cargo damage. |
 | OpenRoad: More Traffic (`OpenRoad_More_Traffic.scs`) | AI vehicle limit 300; density via the game variable `g_traffic`. |
 
@@ -174,8 +174,9 @@ Low-gear launch: wheel torque is about 4.2x stock (12 x 0.35), so traction contr
 | File | Parameter | Stock | Mod |
 |---|---|---|---|
 | def/vehicle/physics.sii | sway_bar_stiffness_factor (front axle anti-roll bar) | 1.0 | 3.0 |
+| def/vehicle/trailer*/.../*.sii (350 trailer chassis) | cog_cargo_offset_min / _max (cargo centre of gravity) | none in 313, own in 37 | (0, -0.5, 0); cog_cargo_mass_min/max 0 / 30000 added where missing |
 
-The real lever is in the game options, Gameplay: "Vehicle stability" (`g_truck_stability`, stock 0) and "Trailer stability" (`g_trailer_stability`). Per the game's tooltip they lower the centre of gravity; set both to maximum. Truck centre of gravity comes from the vehicle models, not from def files, so "never tips over" cannot be guaranteed by a mod.
+Checked in the game on 24.10: with the lower cargo centre of gravity AND both Gameplay sliders "Vehicle stability" and "Trailer stability" at maximum a loaded trailer no longer tips over in a sharp turn; at minimum it still does. The anti-roll bar alone (x3, a test with x10 too) did not help.
 
 ### Big Money
 
