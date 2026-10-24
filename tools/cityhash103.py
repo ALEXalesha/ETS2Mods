@@ -1,7 +1,8 @@
-"""Pure Python CityHash64, version 1.0.x (the variant SCS HashFS uses).
+"""Pure Python CityHash64 as SCS HashFS uses it.
 
-The `cityhash` package on PyPI implements CityHash 1.1, which gives different
-results for most inputs, so HashFS path lookups need this older variant.
+Strings up to 64 bytes hash like CityHash 1.0.x (the `cityhash` package on PyPI
+implements 1.1, which differs there). Longer strings hash like 1.1: with the 1.0
+branch every path over 64 characters (4573 in ATS 1.61 def.scs) had no entry.
 """
 
 M = 0xFFFFFFFFFFFFFFFF
@@ -110,24 +111,23 @@ def cityhash64(data):
         return _len0to16(s, n) if n <= 16 else _len17to32(s, n)
     if n <= 64:
         return _len33to64(s, n)
-    x = _f64(s, 0)
-    y = _f64(s, n - 16) ^ k1
-    z = _f64(s, n - 56) ^ k0
-    v = _weak_s(s, n - 64, n, y)
-    w = _weak_s(s, n - 32, (n * k1) & M, k0)
-    z = (z + _smix(v[1]) * k1) & M
-    x = (_rot((z + x) & M, 39) * k1) & M
-    y = (_rot(y, 33) * k1) & M
+    # CityHash 1.1 branch: the end first, then 64-byte chunks with v, w, x, y, z as state
+    x = _f64(s, n - 40)
+    y = (_f64(s, n - 16) + _f64(s, n - 56)) & M
+    z = _h16((_f64(s, n - 48) + n) & M, _f64(s, n - 24))
+    v = _weak_s(s, n - 64, n, z)
+    w = _weak_s(s, n - 32, (y + k1) & M, x)
+    x = (x * k1 + _f64(s, 0)) & M
     rem = (n - 1) & ~63
     p = 0
     while True:
-        x = (_rot((x + y + v[0] + _f64(s, p + 16)) & M, 37) * k1) & M
+        x = (_rot((x + y + v[0] + _f64(s, p + 8)) & M, 37) * k1) & M
         y = (_rot((y + v[1] + _f64(s, p + 48)) & M, 42) * k1) & M
         x ^= w[1]
-        y ^= v[0]
-        z = _rot(z ^ w[0], 33)
+        y = (y + v[0] + _f64(s, p + 40)) & M
+        z = (_rot((z + w[0]) & M, 33) * k1) & M
         v = _weak_s(s, p, (v[1] * k1) & M, (x + w[0]) & M)
-        w = _weak_s(s, p + 32, (z + w[1]) & M, y)
+        w = _weak_s(s, p + 32, (z + w[1]) & M, (y + _f64(s, p + 16)) & M)
         z, x = x, z
         p += 64
         rem -= 64

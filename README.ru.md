@@ -136,7 +136,7 @@ python tools/save_money.py --save latest --set 10000000000 --apply
 | Файл | Параметр | Было | Стало |
 |---|---|---|---|
 | truck/*/engine/*.sii (203 двигателя) | torque, secondary_torque | 1300-3800 Нм | x12 |
-| truck/*/transmission/*.sii (170 коробок) | differential_ratio | 2.38-4.83 | x0.35 |
+| truck/*/transmission/*.sii (195 коробок) | differential_ratio | 2.38-4.83 | x0.35 |
 | vehicle/physics.sii | air_resistance | 3.0 | 0.1 (не ноль) |
 | vehicle/physics.sii | brake_torque_factor / brake_cooling_rate | 1.0 / 0.01 | 4.0 / 0.05 |
 | vehicle/physics.sii | steering_sensitivity_multiplier_minimum | 0.2 | 0.1 |

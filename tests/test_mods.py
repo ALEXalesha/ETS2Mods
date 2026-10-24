@@ -61,6 +61,45 @@ class CityHashTest(unittest.TestCase):
         self.assertEqual(cityhash64(""), 11160318154034397263)
         self.assertEqual(cityhash64("version.sii"), 203568326075060621)
 
+    def test_paths_longer_than_64_bytes(self):
+        """Regression 24.10 (found in the ATS project): the > 64 byte branch followed CityHash 1.0, but HashFS
+        uses the 1.1 variant there. 25 of 195 gearboxes (retarder / overdrive variants) were invisible, so
+        Hyper Power left them stock and those trucks stopped on the rev limiter."""
+        # values taken from def.scs entry tables (ETS2 1.61, ATS 1.61)
+        self.assertEqual(cityhash64("def/vehicle/truck/daf.xf_euro6/transmission/12_speed_ret_over.sii"),
+                         17709514959872134291)
+        self.assertEqual(cityhash64("def/sign/template/navigation/us_hw_420x300_int_rnd_1dir_1shld_1dest_str_"
+                                    "1dir_1shld_1dest_left_1dir_1shld_1dest_right_1.sii"),
+                         4867924468406487246)
+
+
+@unittest.skipUnless(HAVE_GAME, "game not installed")
+class ArchiveListingTest(unittest.TestCase):
+    def test_every_listed_truck_file_is_readable(self):
+        """Every file a directory listing names under def/vehicle has an entry (nothing invisible to the mods)."""
+        defs = build_mods.LayeredFs(GAME)
+        missing, seen = [], 0
+        for name, fs in defs.archives:
+            stack = ["def/vehicle"]
+            while stack:
+                p = stack.pop()
+                try:
+                    dirs, files = fs.listdir(p)
+                except KeyError:
+                    continue
+                for f in files:
+                    seen += 1
+                    if fs.get(p + "/" + f) is None:
+                        missing.append("%s:%s/%s" % (name, p, f))
+                stack.extend(p + "/" + d for d in dirs)
+        self.assertGreater(seen, 1000)
+        self.assertEqual(missing[:5], [])
+
+    def test_hyper_power_covers_every_gearbox(self):
+        defs = build_mods.LayeredFs(GAME)
+        trans = build_mods.expand_path(defs, "def/vehicle/truck/*/transmission/*.sii", "accessory_transmission_data")
+        self.assertEqual(len(trans), 195)       # 170 before the CityHash fix of 24.10
+
 
 @unittest.skipUnless(HAVE_GAME, "game not installed")
 class BuiltModsTest(unittest.TestCase):

@@ -143,7 +143,7 @@ What caps the speed:
 | File | Parameter | Stock | Mod |
 |---|---|---|---|
 | def/vehicle/truck/*/engine/*.sii (203 engines) | torque, secondary_torque | 1300 to 3800 Nm | x12 (15600 to 45600) |
-| def/vehicle/truck/*/transmission/*.sii (170 gearboxes, 26 trucks) | differential_ratio | 2.38 to 4.83 | x0.35 |
+| def/vehicle/truck/*/transmission/*.sii (195 gearboxes, 26 trucks) | differential_ratio | 2.38 to 4.83 | x0.35 |
 | def/vehicle/physics.sii | air_resistance | 3.0 | 0.1 (not 0) |
 | def/vehicle/physics.sii | brake_torque_factor | 1.0 | 4.0 |
 | def/vehicle/physics.sii | brake_cooling_rate | 0.01 | 0.05 |

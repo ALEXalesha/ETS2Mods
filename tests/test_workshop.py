@@ -179,8 +179,12 @@ class WorkshopTest(unittest.TestCase):
         CRLF like the other paste files, naming the coefficients that changed. Only the mods
         with a note for their current version get the file."""
         with_note = [b for b in folders() if os.path.exists(os.path.join(b, "steam_changelog.txt"))]
-        self.assertEqual([os.path.basename(b) for b in with_note], ["03_OpenRoad_Big_Money"])
-        data = rb(os.path.join(with_note[0], "steam_changelog.txt"))
+        self.assertEqual([os.path.basename(b) for b in with_note],
+                         ["01_OpenRoad_Hyper_Power", "03_OpenRoad_Big_Money"])   # Hyper 1.2.1: 24.10
+        hyper = rb(os.path.join(with_note[0], "steam_changelog.txt")).decode("utf-8")
+        self.assertTrue(hyper.startswith("1.2.1 - "), hyper[:40])
+        self.assertIn("195", hyper)
+        data = rb(os.path.join(with_note[1], "steam_changelog.txt"))
         self.assertEqual(data.count(b"\n"), data.count(b"\r\n"))
         text = data.decode("utf-8")
         with open(os.path.join(ROOT, "mods", "money", "mod.json"), encoding="utf-8") as fh:

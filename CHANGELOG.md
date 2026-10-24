@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.3 - 2026-10-24
+
+- Hyper Power 1.2.1: the x0.35 final drive is in every gearbox now. 25 of 195 gearboxes (retarder and overdrive variants) were left stock: tools/cityhash103.py hashed paths over 64 characters with the CityHash 1.0 branch, but HashFS uses the 1.1 branch there, so those game files were invisible. Found in the ATS project, where it hit 83 of 181 gearboxes. Engines were not affected (all 203 paths are shorter), so No Fuel and the torque changes were complete.
+- Laws: two long paths with hashes from the game archives, every listed file under def/vehicle has an entry, 195 gearboxes.
+
+---
+
+- Hyper Power 1.2.1: главная пара x0.35 теперь в каждой коробке. 25 из 195 коробок (варианты с ретардером и овердрайвом) оставались заводскими: tools/cityhash103.py считал хеш путей длиннее 64 символов по ветке CityHash 1.0, а HashFS там использует 1.1, и эти файлы игры были невидимы. Найдено в проекте ATS, где так пропало 83 из 181 коробки. Двигателей это не коснулось (все 203 пути короче), поэтому No Fuel и момент были полными.
+- Законы: два длинных пути с хешами из архивов игры, у каждого файла из списков def/vehicle есть запись, 195 коробок.
+
 ## 1.2.2 - 2026-10-24
 
 Descriptions, plus one new game file in Free Services.
