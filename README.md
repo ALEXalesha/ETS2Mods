@@ -2,7 +2,8 @@
 
 Ten single-player mods for Euro Truck Simulator 2 (game version 1.61), plus the tools that build them from the game's own files: a HashFS reader, save editors for money, level and skills, and a test suite.
 
-[![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-D97757?logo=claude&logoColor=white)](https://claude.com/claude-code)
+[![Status](https://img.shields.io/badge/status-stable-brightgreen)](#) [![Release](https://img.shields.io/github/v/release/ALEXalesha/ETS2Mods)](https://github.com/ALEXalesha/ETS2Mods/releases/latest) [![CI](https://github.com/ALEXalesha/ETS2Mods/actions/workflows/ci.yml/badge.svg)](https://github.com/ALEXalesha/ETS2Mods/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![ETS2](https://img.shields.io/badge/Euro_Truck_Simulator_2-mods-1B2838?logo=steam&logoColor=white)](https://store.steampowered.com/app/227300/) [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)](https://www.python.org/) [![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-D97757?logo=claude&logoColor=white)](https://claude.com/claude-code)
+
 Code, tests and docs are written by Claude (Anthropic) in Claude Code. Ideas, testing and decisions - Alexey.
 
 > Not affiliated with or endorsed by SCS Software. "Euro Truck Simulator 2" is a trademark of SCS Software. The mods are fan-made and for single player only; they do not work on TruckersMP or in Convoy.
